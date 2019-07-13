@@ -1,0 +1,264 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #d8ffd6;
+}
+
+.back-btn {
+    padding: 0 3px;
+    border: #2bbc0e 2px solid;
+    border-radius: 5px;
+    text-decoration: none;
+    position: absolute;
+    top: 0;
+}
+
+.back-btn:hover {
+    background-color: #20eb1a7d;
+}
+
+header {
+    text-align: -webkit-center;
+    border-style: solid;
+    border-radius: 10px;
+    width: fit-content;
+    margin: 25px auto 15px auto;
+    padding: 10px 35px;
+    font-size: 38px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 1.8em;
+}
+
+span {
+    padding: 0 5px;
+}
+
+.calendar-table {
+    width: 90%;
+    padding: 15px;
+    margin: 15px auto;
+    border-collapse: collapse;
+}
+
+tr {
+    height: 4em;
+}
+
+td {
+    padding: 2px 0;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    display: inline-block;
+    width: 14.25%;
+    height: 80px;
+    overflow: hidden;
+}
+
+td:hover {
+    background-color: #b5f0b2;
+}
+
+td > div {
+    background-color: #65caee;
+    margin-bottom: 1px;
+    white-space: nowrap;
+}
+
+p.day-nums {
+    width: 3ch;    
+    border: #706d6d;
+    border-style: solid;
+    border-width: 1.3px;
+    border-radius: 50%;
+    text-align: center;
+    cursor: pointer;
+}
+
+p.extra-days {
+    cursor: pointer;
+}
+
+.extra-days {
+    color: #918f8f;
+}
+
+.this-month-days, .extra-days {
+    cursor: pointer;
+}
+
+.fas {
+    font-size: 32px;
+}
+
+button:focus {
+    outline: none;
+}
+
+.nav-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    vertical-align: text-bottom;
+}
+
+.new-event {
+    width: 100%;
+    margin: 10px 0;
+    background-color: #65caee;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	border: 1px solid #2c7da1;
+	cursor: pointer;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 16px;
+	padding: 12px 50px;
+	text-decoration: none;
+	text-shadow: 1px 1px 0px #020d1d;
+}
+
+.new-event:hover {
+    background-color: #61c1e3;
+}
+
+.reset {
+    background-color: #fd6161;
+}
+
+.reset:hover {
+    background-color: #e85757;
+}
+
+.create {
+    background-color: #56c347;
+}
+
+.create:hover {
+    background-color: #4baf3e;
+}
+
+.reset, .create {
+    width: 100%;
+    -moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+    border-radius: 5px;
+    border-style: none;
+    margin: 1px;
+    font-size: 14px;
+    padding: 5px 0;
+    color: #ffffff;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+aside {
+    padding: 5px;
+}
+
+aside > h2 {
+    padding-top: 15px;
+    text-decoration: underline;
+}
+
+#time {
+    text-align: center;
+    font-size: 18px;
+    padding: 5px 0;
+}
+
+#noElemYet > p {
+    font-size: 18px;
+    padding: 5px 0;
+}
+
+#calForm > input {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+#calForm > p {
+    color: red;
+}
+
+#lists {
+    max-height: 20em;
+    overflow: auto;
+}
+
+#lists > div {
+    border-style: solid;
+    border-radius: 5px;
+    padding: 5px;
+    border-color: #65caee;
+    margin-bottom: 2px;
+}
+
+#lists > div > p > span {
+    font-variant: petite-caps;
+    font-weight: bold;
+}
+
+.days {
+    height: auto;
+}
+
+.days > td {
+    border: none;
+    height: auto;
+    position: relative;
+    text-align: center;
+    font-weight: bold;
+}
+
+[class*="col-"] {
+    float: left;
+    width: 100%;
+}
+
+.row::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+@media only screen and (min-width: 600px) {
+    .col-s-1 {width: 8.33%;}
+    .col-s-2 {width: 16.66%;}
+    .col-s-3 {width: 25%;}
+    .col-s-4 {width: 33.33%;}
+    .col-s-5 {width: 41.66%;}
+    .col-s-6 {width: 50%;}
+    .col-s-7 {width: 58.33%;}
+    .col-s-8 {width: 66.66%;}
+    .col-s-9 {width: 75%;}
+    .col-s-10 {width: 83.33%;}
+    .col-s-11 {width: 91.66%;}
+    .col-s-12 {width: 100%;}
+    .col-s-20 {width: 20%;}
+    .col-s-30 {width: 30%;}
+}
+
+@media only screen and (min-width: 900px) {
+    .col-1 {width: 8.33%;}
+    .col-2 {width: 16.66%;}
+    .col-3 {width: 25%;}
+    .col-4 {width: 33.33%;}
+    .col-5 {width: 41.66%;}
+    .col-6 {width: 50%;}
+    .col-7 {width: 58.33%;}
+    .col-8 {width: 66.66%;}
+    .col-9 {width: 75%;}
+    .col-10 {width: 83.33%;}
+    .col-11 {width: 91.66%;}
+    .col-12 {width: 100%;}
+    .col-11_11 {width: 11.11%;}
+}
