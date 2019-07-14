@@ -13,16 +13,17 @@ alap/hónap váltásakor (
 
 adat props = {
     id : string (6karakter random),
-    user: string,
     month: string,
     startDay: int,
     lengt: int(days),
     title: string,
+    state: string (todo/doing/test/done),
+    
+    user: string,
     description: string (mutasson txt/csv-re),
     tag: string,
     duration: int (hours),
     watchers: string (user/self),
-    state: string (todo/doing/test/done),
     public: bool,
     comment: string (txt/csv-re),
 }
@@ -30,6 +31,6 @@ adat props = {
 adatbázis: userek, 1 tábla/hónap, tags, 
 */
 
-import drawCalendar from '/drawCalendar.js';
+import drawCalendar from '/js/drawCalendar.js';
 
 console.log(drawCalendar(2019, 6));

@@ -1,4 +1,5 @@
-import Month from '/month-class.js';
+import Month from './month-class.js';
+import getTaskData from './task.js';
 /*const Months = ["Január", "Február", "Március", "Április", 
                 "Május", "Június", "Július", "Augusztus", 
                 "Szeptember", "Október", "November", "December"];*/
@@ -14,11 +15,6 @@ function drawCalendar(_year, _month) {
     let dateNum = 1;
     let cellNum = 1;
     let current = true;
-    /*
-    .length;
-    .firstDay
-    .rowNum
-    */
 
     let table = `<table class="calendar-table">`;
     for (let i = 0; i < currentMonth.rowNum; i++) {
@@ -44,8 +40,6 @@ function drawCalendar(_year, _month) {
                 <span>${dateNum}</span>
                 </td>`;
             }
-            
-
             cellNum++;
             dateNum++;
         }
@@ -54,12 +48,8 @@ function drawCalendar(_year, _month) {
     table += `</table>`;
 
     calBody.innerHTML = table;
+
+    getTaskData(_month);
 }
-
-
-
-
-
-
 
 export default drawCalendar;
