@@ -29,3 +29,7 @@ adat props = {
 
 adatbázis: userek, 1 tábla/hónap, tags, 
 */
+
+import drawCalendar from '/drawCalendar.js';
+
+console.log(drawCalendar(2019, 6));
