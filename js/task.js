@@ -4,7 +4,7 @@ export default function getTaskData(monthId) {
     var newFormData = new FormData();
     newFormData.append("month", monthId);
 
-/*
+
     $.ajax({
         url: "./php/get-task.php",
         method: "POST",
@@ -14,13 +14,15 @@ export default function getTaskData(monthId) {
         processData: false,
         beforeSend: function() {
             //loader activate
-        },*/
-       // success: function(data) {
-            let data = /*JSON.parse(data);*/ [['id1','6', '11', 'length', 'title', 'state'], ['id2','7', '2', 'length', 'title', 'state'], ['id3','6', '22', 'length', 'title', 'state']];
-            console.log(data);
+        },
+        success: function(data) {
+            data = JSON.parse(data);// [['id1','6', '11', 'length', 'title', 'state'], ['id2','7', '2', 'length', 'title', 'state'], ['id3','6', '22', 'length', 'title', 'state']];
+            //console.log(data);
+            //console.log(data[0]);
+            //console.log(data[0][1]);
             fillCalendar(data);
-        //}
-    //});
+        }
+    });
 }
 
 let tasks = {};
@@ -28,9 +30,11 @@ let newTasks = [];
 
 function fillCalendar(taskData) {
     for (let i = 0; i < taskData.length; i++) {
-        tasks[taskData[i][0]] = new Task(taskData[i]);
-        newTasks.push(tasks[taskData[i][0]].id);
-        document.getElementById(`#${tasks[taskData[i][0]].month}-${tasks[taskData[i][0]].startDay}`).innerHTML = `<div id="${tasks[taskData[i][0]].id}">${i}</div>`;
+        //console.log(taskData[i]);
+        tasks[taskData[i]] = new Task(taskData[i]);
+        //console.log(tasks[taskData[i]]);
+        newTasks.push(tasks[taskData[i]].id);
+        document.getElementById(`#${tasks[taskData[i]].month}-${tasks[taskData[i]].startDay}`).innerHTML = `<div id="${tasks[taskData[i]].id}">${i}</div>`;
     }
 
     for (let i = 0; i < newTasks.length; i++) {
