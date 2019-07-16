@@ -17,9 +17,11 @@ export default function getTaskData(monthId) {
         },
         success: function(data) {
             data = JSON.parse(data);// [['id1','6', '11', 'length', 'title', 'state'], ['id2','7', '2', 'length', 'title', 'state'], ['id3','6', '22', 'length', 'title', 'state']];
-            //console.log(data);
+            document.getElementById('dump').innerHTML = data;
+            console.log(typeof data);
             //console.log(data[0]);
-            //console.log(data[0][1]);
+            console.log(data);
+            console.log(data[0]);
             fillCalendar(data);
         }
     });
@@ -38,9 +40,11 @@ function fillCalendar(taskData) {
     }
 
     for (let i = 0; i < newTasks.length; i++) {
+        console.log(tasks);
+        console.log(tasks[this.id]);
         document.getElementById(newTasks[i]).addEventListener("click", function() {
             tasks[this.id].open([1,2,3,4,5,6,7]);
-            console.log(tasks[this.id]);
+            
         })
     }
 }
