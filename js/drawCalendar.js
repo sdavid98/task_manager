@@ -49,7 +49,7 @@ function drawCalendar(_year, _month) {
 
     calBody.innerHTML = table;
 
-    getTaskData(_month);
+    //getTaskData(_month);
 }
 
 export default drawCalendar;

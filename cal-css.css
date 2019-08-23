@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #d8ffd6;
+    background-color: #d6ecfb;
 }
 
 .back-btn {
@@ -261,4 +261,24 @@ aside > h2 {
     .col-11 {width: 91.66%;}
     .col-12 {width: 100%;}
     .col-11_11 {width: 11.11%;}
+}
+
+
+.calendar-table {
+    display: flex;
+    align-content: stretch;
+    align-items: stretch;
+    justify-content: space-around;
+    height: 80vh;
+}
+
+tr {
+    width: 100%;
+    display: inline-flex;
+    height: 20%;
+}
+
+.prev-month, .current-month, .next-month {
+    width: 100%;
+    height: auto;
 }

@@ -33,4 +33,4 @@ adatbázis: userek, 1 tábla/hónap, tags,
 
 import drawCalendar from './js/drawCalendar.js';
 
-console.log(drawCalendar(2019, 6));
+console.log(drawCalendar(2019, 7));
