@@ -1,6 +1,6 @@
 import Task from './event_minimal-class.js';
 
-export default function getTaskData(monthId) {
+ function getTaskData(monthId) {
     var newFormData = new FormData();
     newFormData.append("month", monthId);
 
@@ -16,13 +16,7 @@ export default function getTaskData(monthId) {
             //loader activate
         },
         success: function(data) {
-            data = JSON.parse(data);// [['id1','6', '11', 'length', 'title', 'state'], ['id2','7', '2', 'length', 'title', 'state'], ['id3','6', '22', 'length', 'title', 'state']];
-            //document.getElementById('dump').innerHTML = data;
-            console.log(typeof data);
-            //console.log(data[0]);
-            //console.log(data);
-            //console.log(typeof (data[0]));
-            //console.log(data[0][0]);
+            data = JSON.parse(data);
             fillCalendar(data);
         }
     });
@@ -31,7 +25,7 @@ export default function getTaskData(monthId) {
 let tasks = {};
 let newTasks = [];
 
-function fillCalendar(taskData) {
+export default function fillCalendar(taskData) {
     for (let i = 0; i < taskData.length; i++) {
         tasks[taskData[i].id] = new Task(taskData[i]);
         let currentTask = tasks[taskData[i].id];

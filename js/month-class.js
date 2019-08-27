@@ -2,6 +2,31 @@ export default class Month {
     constructor(year, monthId) {
         this.year = year;
         this.monthId = monthId;
+        this.prevLength = getMonthLength(monthId-1);
+    }
+
+    getCalendarEndPoints() {
+        let startDate;
+        let endDate;
+
+        this.firstDayNum != 1 ? 
+        startDate = `${this.year}-${this.monthId-1}-${this.prevLength - this.firstDayNum + 2}` 
+        : 
+        startDate = `${this.year}-${this.monthId}-01`;
+
+        this.monthLength + this.firstDayNum -1 != this.rowNum * 7 ? 
+        endDate = `${this.year}-${this.monthId+1}-${this.rowNum * 7 - this.monthLength - this.firstDayNum + 1}` 
+        : 
+        endDate = `${this.year}-${this.monthId}-${this.monthLength}`;
+
+        return {
+                "startDate" : startDate,
+                "endDate": endDate
+                };
+    }
+
+    get calendarEndPoints() {
+        return getCalendarEndPoints(this.firstDayNum, this.monthLength, this.prevLength);
     }
 
     get length() {

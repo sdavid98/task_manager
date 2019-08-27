@@ -1,5 +1,6 @@
 import Month from './month-class.js';
-import getTaskData from './task.js';
+import fillCalendar from './task.js';
+import callAjax from './callAjax.js';
 /*const Months = ["Január", "Február", "Március", "Április", 
                 "Május", "Június", "Július", "Augusztus", 
                 "Szeptember", "Október", "November", "December"];*/
@@ -49,7 +50,10 @@ function drawCalendar(_year, _month) {
 
     calBody.innerHTML = table;
 
+    
+
     //getTaskData(_month);
+    callAjax(currentMonth.calendarEndPoints, "./php/get-task.php", fillCalendar);
 }
 
 export default drawCalendar;
