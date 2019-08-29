@@ -27,30 +27,6 @@ function gettitle() {
             $a[] = $res;
         }
         return json_encode($a);
-        /*
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        foreach($result as $r) {
-            $res= "{";
-            foreach($r as $val => $v) {
-                $v = utf8_encode($v);
-                $res .= "\"{$val}\": \"{$v}\", ";
-                //"[".$val."] => ".utf8_encode($v)."\"";
-            }
-            $res = rtrim($res,", ");
-            $res .= "}";
-            
-            $a[] = $res;
-        }
-        //var_dump($a);
-        return json_encode($a);*/
-
-        /*
-        foreach($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            $a[] = array(utf8_encode($row['title']), $row['id'], $row['month'], $row['start_day']);
-        }
-    
-        return json_encode($a);*/
-
     }
 
     catch(PDOExeption $e)
