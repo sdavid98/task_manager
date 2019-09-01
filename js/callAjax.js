@@ -1,5 +1,6 @@
 export default function callAjax(inputData, targetUrl, successFunc) {
-    const data = JSON.stringify(inputData);
+    const data = new FormData;
+    data.append('sending', JSON.stringify(inputData));
 
     $.ajax({
         url: targetUrl,
@@ -8,6 +9,10 @@ export default function callAjax(inputData, targetUrl, successFunc) {
         contentType: false,
         cache: false,
         processData: false,
-        success: successFunc(JSON.parse(data))
+        success: function(data) {
+            console.log(data);
+            return successFunc(JSON.parse(data));
+        }
+        
     });
 }

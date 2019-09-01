@@ -53,7 +53,7 @@ function drawCalendar(_year, _month) {
     
 
     //getTaskData(_month);
-    callAjax(currentMonth.calendarEndPoints, "./php/get-task.php", fillCalendar);
+    callAjax(currentMonth.calendarEndPoints, './php/get-task.php', fillCalendar);
 }
 
 export default drawCalendar;

@@ -1,19 +1,14 @@
 export default class Task{
     constructor(obj) {
-        let id, month, start_day, length, title, state_fk, rest;
-        ({id, month, start_day, length, title, state_fk, ...rest} = obj);
+        let id, start_year, start_month, start_day, length, title, state_fk, rest;
+        ({id, start_year, start_month, start_day, length, title, state_fk, ...rest} = obj);
         this.id = id;
-        this.month = month;
-        this.startDay = start_day;
+        this.start_year = start_year;
+        this.start_month = start_month;
+        this.start_day = start_day;
         this.length = length;
         this.title = title;
         this.state = state_fk;
-       /* this.id = array[0];
-        this.month = array[1];
-        this.startDay = array[2];
-        this.length = array[3];
-        this.title = array[4];
-        this.state = array[5];*/
     }
 
     open(remaining) {

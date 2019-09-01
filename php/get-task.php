@@ -1,7 +1,6 @@
 <?php
 require_once('queries.php');
-
-print_r(gettitle());
+print_r(initialCalendar(json_decode($_POST['sending'])));
 
 
 

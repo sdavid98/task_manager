@@ -1,10 +1,10 @@
 <?php
 
-
+/*
 $user_id = 34;
-$month_id = $_POST["month"];
+$month_id = $_POST["month"];*/
 
-function gettitle() {
+function connect($statement, $stmtData) {
     try
     {
         $dbhost = '127.0.0.1';
@@ -14,8 +14,9 @@ function gettitle() {
 
         $a = array();
         $db_conn = new PDO("mysql:dbhost=$dbhost; dbname=$dbname", "$dbuser", "$dbpass");
-        $stmt = $db_conn->prepare("SELECT * FROM task"); 
-        $stmt->execute();
+        
+        $stmt = $db_conn->prepare($statement); 
+        $stmt->execute($stmtData);
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach($result as $r) {
@@ -33,6 +34,14 @@ function gettitle() {
     {
         echo $e->getMassage();
     }
+}
+
+function initialCalendar($input) {
+    //return $input->calendarStart->year;
+    $startDay = $input->calendarStart->day;
+    $startMonth = $input->calendarStart->month;
+    $startYear = $input->calendarStart->year
+    return connect("SELECT * FROM task WHERE start_month >= :startMonth", ['startMonth'=> $startMonth]);
 }
 
 ?>
