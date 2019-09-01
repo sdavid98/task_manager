@@ -8,22 +8,37 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css'
         integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
-    <link rel="stylesheet" href="cal-css.css">
+    <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script type="module" src="main.js"></script>
 </head>
 
 <body>
-    <div>
-        <h2><button class="nav-btn" onclick=""><i class="fas fa-caret-left"></i></button>
+    <header>
+        <nav>
+            <h2><button class="nav-btn" onclick=""><i class="fas fa-caret-left"></i></button>
             <span>2019</span><span id="month"></span>
             <button class="nav-btn" onclick=""><i class="fas fa-caret-right"></i></button>
-        </h2>
-    </div>
+            </h2>
+        </nav>
+    </header>
     <div class="row col-12">
-        <section id="cal-body" class="col-9 col-s-12">
-        </section>
+        <section id="cal-body" class="col-8 col-s-12"></section>
+        <aside class="col-4 col-s-12 details">
+            <div class="details-mini">
+                <div class="details-mini-header">
+                    <h1 class="details-title">Task Title</h1>
+                    <div class="icon-container">
+                        <!--state, public, tags, nagyablak-nyitás-->
+                    </div>
+                </div>
+                <div class="details-mini-content">
+                    <div class="details-description"></div>
+                    <div class="details-comments"></div>
+                </div>
+            </div>
+        </aside>
     </div>
     <div id="dump"></div>
 </body>

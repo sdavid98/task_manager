@@ -40,7 +40,7 @@ function initialCalendar($input) {
     //return $input->calendarStart->year;
     $startDay = $input->calendarStart->day;
     $startMonth = $input->calendarStart->month;
-    $startYear = $input->calendarStart->year
+    $startYear = $input->calendarStart->year;
     return connect("SELECT * FROM task WHERE start_month >= :startMonth", ['startMonth'=> $startMonth]);
 }
 

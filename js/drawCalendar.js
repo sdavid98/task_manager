@@ -17,9 +17,9 @@ function drawCalendar(_year, _month) {
     let cellNum = 1;
     let current = true;
 
-    let table = `<table class="calendar-table">`;
+    let table = `<table class="calendar-table" id="calendar">`;
     for (let i = 0; i < currentMonth.rowNum; i++) {
-        table += `<tr>`;
+        table += `<tr class="calendar-row">`;
         for (let j = 0; j < 7; j++) {
             if(cellNum < currentMonth.firstDay) {
                 table += `<td id="#${prevMonth.monthId}-${prevMonth.length + cellNum - currentMonth.firstDay + 1}" class="prev-month">
@@ -49,7 +49,12 @@ function drawCalendar(_year, _month) {
     table += `</table>`;
 
     calBody.innerHTML = table;
+    
+    for (let i = 0; i < document.getElementsByClassName('calendar-row').length; i++) {
+        document.getElementsByClassName('calendar-row')[i].style.height = (100 / document.getElementsByClassName('calendar-row').length)+'%';
+    }
 
+    
     
 
     //getTaskData(_month);
