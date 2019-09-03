@@ -8,10 +8,13 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css'
         integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
-    <link rel="stylesheet" href="style.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+        <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+        <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script type="module" src="main.js"></script>
+    
 </head>
 
 <body>
@@ -26,17 +29,22 @@
     <div class="row col-12">
         <section id="cal-body" class="col-8 col-s-12"></section>
         <aside class="col-4 col-s-12 details">
-            <div class="details-mini">
-                <div class="details-mini-header">
-                    <h1 class="details-title">Task Title</h1>
+            <h1 class="details__date">No task for Today</h1>
+            <div class="details__mini">
+                <div class="details__mini__header">
+                    <h2 class="details__mini__title"><span  class="details__mini__title__icon"><a class="fas" id="asd" onclick="this.classList.toggle('fas--active')">&#xf107;</a></span>Task Title Task Title</h2>
                     <div class="icon-container">
-                        <!--state, public, tags, nagyablak-nyitás-->
+                    <!--nagyablak-nyitás-->
                     </div>
                 </div>
-                <div class="details-mini-content">
-                    <div class="details-description"></div>
-                    <div class="details-comments"></div>
+                
+                <div class="details__mini__content" id="dsa">
+                   <p>HTML DOM events allow JavaScript to register different event handlers on elements in an HTML document. Events are normally used in combination with functions, and the function will not be executed before the event occurs (such as when a user clicks a button).</p> 
                 </div>
+                
+                    
+                
+                
             </div>
         </aside>
     </div>

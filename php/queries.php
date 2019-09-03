@@ -37,11 +37,26 @@ function connect($statement, $stmtData) {
 }
 
 function initialCalendar($input) {
-    //return $input->calendarStart->year;
     $startDay = $input->calendarStart->day;
     $startMonth = $input->calendarStart->month;
     $startYear = $input->calendarStart->year;
-    return connect("SELECT * FROM task WHERE start_month >= :startMonth", ['startMonth'=> $startMonth]);
+
+    $endDay = $input->calendarEnd->day;
+    $endMonth = $input->calendarEnd->month;
+    $endYear = $input->calendarEnd->year;
+
+    $stmt = "SELECT task_id, start_month, start_day, length, title, state FROM task 
+            WHERE 
+            (start_month = :startMonth AND start_day >= :startDay)
+            OR
+            (start_month > :startMonth AND start_month < :endMonth)
+            OR 
+            (start_month = :endMonth AND start_day <= :endDay)";
+
+    $stmtParams = ['startDay' => $startDay, 'startMonth' => $startMonth, 'endDay' => $endDay, 'endMonth' => $endMonth];
+
+    return connect($stmt, $stmtParams);
+    //return connect("SELECT task_id, start_month, start_day, length, title, state FROM task WHERE start_month >= :startMonth", ['startMonth'=> $startMonth]);
 }
 
 ?>

@@ -23,13 +23,13 @@ function drawCalendar(_year, _month) {
         for (let j = 0; j < 7; j++) {
             if(cellNum < currentMonth.firstDay) {
                 table += `<td id="#${prevMonth.monthId}-${prevMonth.length + cellNum - currentMonth.firstDay + 1}" class="prev-month">
-                <span>${prevMonth.length + cellNum - currentMonth.firstDay + 1}</span>
+                <span class="calendar-days">${prevMonth.length + cellNum - currentMonth.firstDay + 1}</span>
                 </td>`;
                 if(cellNum == currentMonth.firstDay - 1) dateNum = 0;
             }
             else if(cellNum >= currentMonth.firstDay && dateNum <= currentMonth.length && current) {
                 table += `<td id="#${currentMonth.monthId}-${dateNum}" class="current-month">
-                <span>${dateNum}</span>
+                <span class="calendar-days">${dateNum}</span></span>
                 </td>`;
                 if(dateNum == currentMonth.length) {
                     dateNum = 0; 
@@ -38,7 +38,7 @@ function drawCalendar(_year, _month) {
             }
             else {
                 table += `<td id="#${nextMonth.monthId}-${dateNum}" class="next-month">
-                <span>${dateNum}</span>
+                <span class="calendar-days">${dateNum}</span>
                 </td>`;
             }
             cellNum++;

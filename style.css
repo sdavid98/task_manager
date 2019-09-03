@@ -5,28 +5,102 @@
 }
 
 body {
-  background-color: #d6ecfb;
+  background-color: #f3f8fd;
 }
 
 .calendar-table {
   width: 100%;
-  height: 80vh;
+  height: 300px;
+  background-color: #303658;
+}
+@media only screen and (min-width: 992px) {
+  .calendar-table {
+    height: 80vh;
+  }
 }
 .calendar-table .calendar-row {
   width: 100%;
   display: inline-flex;
 }
-.calendar-table .calendar-row:nth-child(n+1) {
-  border-left: #b9b9b9 1px solid;
+@media only screen and (min-width: 992px) {
+  .calendar-table .calendar-row:nth-child(n+1) {
+    border-left: #b9b9b9 1px solid;
+  }
+  .calendar-table .calendar-row:first-child {
+    border-top: #b9b9b9 1px solid;
+  }
 }
-.calendar-table .calendar-row:first-child {
-  border-top: #b9b9b9 1px solid;
-}
-.calendar-table .prev-month, .calendar-table .current-month, .calendar-table .next-month {
+.calendar-table .calendar-row .prev-month, .calendar-table .calendar-row .current-month, .calendar-table .calendar-row .next-month {
   width: 100%;
   height: auto;
-  border-right: #b9b9b9 1px solid;
-  border-bottom: #b9b9b9 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+@media only screen and (min-width: 992px) {
+  .calendar-table .calendar-row .prev-month, .calendar-table .calendar-row .current-month, .calendar-table .calendar-row .next-month {
+    border-right: #b9b9b9 1px solid;
+    border-bottom: #b9b9b9 1px solid;
+  }
+}
+.calendar-table .calendar-row .prev-month .line-holder, .calendar-table .calendar-row .current-month .line-holder, .calendar-table .calendar-row .next-month .line-holder {
+  position: absolute;
+  height: 7px;
+  width: 7px;
+  border-radius: 50%;
+  bottom: 7px;
+}
+.calendar-table .calendar-row .prev-month .calendar-days, .calendar-table .calendar-row .next-month .calendar-days {
+  color: #a9a9a9;
+}
+.calendar-table .calendar-row .prev-month .line-holder, .calendar-table .calendar-row .next-month .line-holder {
+  background-color: #acb705;
+}
+.calendar-table .calendar-row .current-month .calendar-days {
+  color: #ffffff;
+}
+.calendar-table .calendar-row .current-month .line-holder {
+  background-color: #efff00;
+}
+
+.details {
+  background-color: #606fee;
+}
+.details__date {
+  font-family: "Open Sans", sans-serif;
+  text-align: center;
+  padding: 15px 0;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+.details__mini__title {
+  font-family: "Open Sans", sans-serif;
+  font-weight: normal;
+  color: #ffffff;
+}
+.details__mini__title__icon {
+  width: 30px;
+  display: inline-block;
+  text-align: center;
+}
+.details__mini__title__icon .fas {
+  transform: rotate(-90deg);
+  transition: 0.3s;
+}
+.details__mini__title__icon .fas--active {
+  transform: rotate(0);
+}
+.details__mini__content {
+  height: 0;
+  overflow: hidden;
+  padding: 0 15px;
+  text-align: left;
+  color: #ffffff;
+  font-family: "Open Sans", sans-serif;
+}
+.details__mini__content p {
+  padding: 10px 15px;
 }
 
 [class*=col-] {
@@ -40,7 +114,7 @@ body {
   display: table;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 992px) {
   .col-s-1 {
     width: 8.33%;
   }
@@ -97,7 +171,7 @@ body {
     width: 30%;
   }
 }
-@media only screen and (min-width: 900px) {
+@media only screen and (min-width: 992px) {
   .col-1 {
     width: 8.33%;
   }
