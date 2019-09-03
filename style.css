@@ -74,6 +74,9 @@ body {
   text-transform: uppercase;
   color: #ffffff;
 }
+.details__mini {
+  margin: 15px 0;
+}
 .details__mini__title {
   font-family: "Open Sans", sans-serif;
   font-weight: normal;
