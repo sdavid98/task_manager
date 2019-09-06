@@ -18,49 +18,31 @@
 </head>
 
 <body>
+    <span id="exit" onclick="window.open('login.html','_self')">X</span>
     <header>
         <nav>
-            <h2><button class="nav-btn" onclick=""><i class="fas fa-caret-left"></i></button>
-            <span>2019</span><span id="month"></span>
-            <button class="nav-btn" onclick=""><i class="fas fa-caret-right"></i></button>
+            <h2><a id="prev" class="nav-btn"><i class="fas fa-caret-left"></i></a>
+            <span id="time"></span>
+            <a id="next" class="nav-btn"><i class="fas fa-caret-right"></i></a>
             </h2>
         </nav>
     </header>
     <div class="row col-12">
         <section id="cal-body" class="col-8 col-s-12"></section>
         <aside id="taskList" class="col-4 col-s-12 details">
-            <h1 class="details__date">No task for Today</h1>
-            <!--
-            <div class="details__mini">
-                <div class="details__mini__header">
-                    <h2 class="details__mini__title"><span  class="details__mini__title__icon"><a class="fas" id="asd" onclick="this.classList.toggle('fas--active')">&#xf107;</a></span>Task Title Task Title</h2>
-                    <div class="icon-container">
-                    
-                    </div>
-                </div>
-                
-                <div class="details__mini__content" id="dsa">
-                   <p>HTML DOM events allow JavaScript to register different event handlers on elements in an HTML document. Events are normally used in combination with functions, and the function will not be executed before the event occurs (such as when a user clicks a button).</p> 
-                </div>
-                
-            </div>
-            <div class="details__mini">
-                <div class="details__mini__header">
-                    <h2 class="details__mini__title"><span  class="details__mini__title__icon"><a class="fas" id="asd" onclick="this.classList.toggle('fas--active')">&#xf107;</a></span>Task Title Task Title</h2>
-                    <div class="icon-container">
-                    nagyablak-nyitás
-                    </div>
-                </div>
-                
-                <div class="details__mini__content" id="">
-                   <p>HTML DOM events allow JavaScript to register different event handlers on elements in an HTML document. Events are normally used in combination with functions, and the function will not be executed before the event occurs (such as when a user clicks a button).</p> 
-                </div>
-                
-                
-            </div>-->
+    
         </aside>
     </div>
-    <div id="dump"></div>
+    <div id="create">&#43;</div>
+    <div id="modal" class="modal">
+        <div><label for="title">Title</label>
+        <input contenteditable="true" id="title" name="title" type="text"></div>
+        <div><label for="desc">Description</label>
+        <textarea name="desc" id="desc" cols="20" rows="5"></textarea></div>
+        <div id="done"><a>Done</a></div>
+        
+    </div>
+    <script type="module" src="main.js"></script>
 </body>
 
 </html>

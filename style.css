@@ -5,7 +5,79 @@
 }
 
 body {
-  background-color: #f3f8fd;
+  background-color: #606fee;
+  font-family: "Open Sans", sans-serif;
+}
+
+#exit {
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 20px;
+}
+
+nav h2 {
+  text-align: center;
+  margin: 25px 0;
+}
+nav h2 a {
+  cursor: pointer;
+}
+
+#create {
+  height: 40px;
+  width: 40px;
+  position: absolute;
+  bottom: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 100%;
+  transform: translateX(-60px);
+  font-size: 60px;
+  border-radius: 50%;
+  background-color: white;
+  color: #606fee;
+  font-weight: bolder;
+  cursor: pointer;
+  transition: 0.2s;
+}
+#create:hover {
+  box-shadow: white 0px 0px 9px 3px;
+}
+
+.modal {
+  display: none;
+  position: absolute;
+  bottom: 100px;
+  right: 50px;
+}
+.modal div {
+  margin: 12px 0;
+}
+.modal label {
+  color: #ffffff;
+}
+.modal label, .modal input, .modal textarea {
+  display: block;
+  font-size: 18px;
+  width: 100%;
+}
+.modal #done {
+  text-align: end;
+  padding-right: 20px;
+  color: #ffffff;
+}
+.modal #done a {
+  padding: 5px;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.modal #done a:hover {
+  background-color: #ffffff;
+  color: #606fee;
 }
 
 .calendar-table {
@@ -30,6 +102,9 @@ body {
     border-top: #b9b9b9 1px solid;
   }
 }
+.calendar-table .calendar-row .today {
+  background-color: #606fee;
+}
 .calendar-table .calendar-row .prev-month, .calendar-table .calendar-row .current-month, .calendar-table .calendar-row .next-month {
   width: 100%;
   height: auto;
@@ -37,12 +112,7 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
-}
-@media only screen and (min-width: 992px) {
-  .calendar-table .calendar-row .prev-month, .calendar-table .calendar-row .current-month, .calendar-table .calendar-row .next-month {
-    border-right: #b9b9b9 1px solid;
-    border-bottom: #b9b9b9 1px solid;
-  }
+  cursor: pointer;
 }
 .calendar-table .calendar-row .prev-month .line-holder, .calendar-table .calendar-row .current-month .line-holder, .calendar-table .calendar-row .next-month .line-holder {
   position: absolute;
@@ -50,6 +120,11 @@ body {
   width: 7px;
   border-radius: 50%;
   bottom: 7px;
+}
+@media only screen and (min-width: 992px) {
+  .calendar-table .calendar-row .prev-month .line-holder, .calendar-table .calendar-row .current-month .line-holder, .calendar-table .calendar-row .next-month .line-holder {
+    bottom: 25px;
+  }
 }
 .calendar-table .calendar-row .prev-month .calendar-days, .calendar-table .calendar-row .next-month .calendar-days {
   color: #a9a9a9;
@@ -81,11 +156,19 @@ body {
   font-family: "Open Sans", sans-serif;
   font-weight: normal;
   color: #ffffff;
+  margin-bottom: 5px;
+}
+.details__mini__title--edit {
+  border: 1px solid transparent;
+}
+.details__mini__title--edit--done {
+  text-decoration-line: line-through;
 }
 .details__mini__title__icon {
   width: 30px;
   display: inline-block;
   text-align: center;
+  cursor: pointer;
 }
 .details__mini__title__icon .fas {
   transform: rotate(-90deg);
@@ -93,6 +176,39 @@ body {
 }
 .details__mini__title__icon .fas--active {
   transform: rotate(0);
+}
+.details__mini__title .dropdown {
+  position: relative;
+  display: inline-block;
+}
+.details__mini__title .dropdown__button {
+  color: white;
+  padding: 0 16px;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+}
+.details__mini__title .dropdown__content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #f9f9f9;
+  min-width: 100px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+.details__mini__title .dropdown__content a {
+  color: black;
+  padding: 0;
+  font-size: 18px;
+  text-decoration: none;
+  display: block;
+}
+.details__mini__title .dropdown__content a:hover {
+  background-color: #f1f1f1;
+}
+.details__mini__title .dropdown:hover .dropdown__content {
+  display: block;
 }
 .details__mini__content {
   height: 0;
@@ -104,6 +220,90 @@ body {
 }
 .details__mini__content p {
   padding: 10px 15px;
+  border: 1px solid transparent;
+}
+
+.login {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #606fee;
+}
+.login button {
+  cursor: pointer;
+  background-color: #565e8e;
+  color: white;
+  outline-style: none;
+  border: none;
+  transition: 0.2s;
+}
+.login button:hover {
+  color: #303658;
+  background-color: #ffffff;
+}
+.login__container {
+  border: 2px solid white;
+  margin: 0 auto;
+  border-radius: 5px;
+  box-shadow: #d6d6d6 0px 0px 2px 1px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 335px;
+}
+.login__container__top-buttons {
+  display: flex;
+  max-width: 300px;
+  margin: auto;
+}
+.login__container__top-buttons button {
+  width: 40%;
+  margin: 25px 5%;
+  height: 35px;
+  font-size: 20px;
+}
+.login__container__top-buttons button.active {
+  background-color: #303658;
+}
+.login__container__top-buttons button.active:hover {
+  color: #303658;
+  background-color: #ffffff;
+}
+.login__container__inputs {
+  padding: 0 5%;
+  width: 250px;
+  margin: auto;
+}
+.login__container__inputs #again {
+  display: none;
+}
+.login__container__inputs #again.again {
+  display: block;
+}
+.login__container__inputs label {
+  display: block;
+  font-size: 18px;
+  color: white;
+  margin-top: 15px;
+}
+.login__container__inputs input {
+  height: 25px;
+  font-size: 18px;
+  width: 100%;
+}
+.login__container__inputs #login {
+  display: block;
+  width: 100%;
+  margin: 40px 0;
+  height: 45px;
+  font-size: 22px;
+  background-color: #303658;
+}
+.login__container__inputs #login:hover {
+  color: #303658;
+  background-color: #ffffff;
 }
 
 [class*=col-] {

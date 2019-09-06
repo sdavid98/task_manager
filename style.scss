@@ -1,7 +1,7 @@
 $calendar-border: #b9b9b9 1px solid;
-$bg-color: #f3f8fd;
+$bg-color: #606fee;
 $calendar-bg-color: #303658;
-$tasklist-bg-color: #606fee;
+$tasklist-bg-color: $bg-color;
 $white: #ffffff;
 $current-number-color: $white;
 $prev-number-color: #a9a9a9;
@@ -21,6 +21,85 @@ $lg-min-width: 992px;
 
 body {
     background-color: $bg-color;
+    font-family: $open-sans;
+}
+
+#exit {
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 20px;
+}
+
+nav {
+    h2 {
+        text-align: center;
+        margin: 25px 0;
+        a {
+            cursor: pointer;
+        }
+    }
+}
+
+#create {
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 100%;
+    transform: translateX(-60px);
+    font-size: 60px;
+    border-radius: 50%;
+    background-color: white;
+    color: #606fee;
+    font-weight: bolder;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+        box-shadow: white 0px 0px 9px 3px;
+    }
+}
+
+.modal {
+    display: none;
+    position: absolute;
+    bottom: 100px;
+    right: 50px;
+
+    div {
+        margin: 12px 0;
+    }
+
+    label {
+        color: $white;
+    }
+
+    label, input, textarea {
+        display: block;
+        font-size: 18px;
+        width: 100%;
+    }
+    #done {
+        text-align: end;
+        padding-right: 20px;
+        color: $white;
+
+        a {
+            padding: 5px;
+            border: 1px solid $white;
+            border-radius: 5px;
+            cursor: pointer;
+            &:hover {
+                background-color: $white;
+                color: $bg-color;
+            }
+        }
+    }
 }
 
 .calendar-table {
@@ -45,6 +124,10 @@ body {
             }
         }
 
+        .today {
+            background-color: $bg-color;
+        }
+
         .prev-month, .current-month, .next-month {
             width: 100%;
             height: auto;
@@ -52,11 +135,7 @@ body {
             align-items: center;
             justify-content: center;
             position: relative;
-
-            @media only screen and (min-width: $lg-min-width) {
-                border-right: $calendar-border;
-                border-bottom: $calendar-border;
-            }
+            cursor: pointer;
             
             .line-holder {
                 position: absolute;
@@ -64,6 +143,10 @@ body {
                 width: 7px;
                 border-radius: 50%;
                 bottom: 7px;
+
+                @media only screen and (min-width: $lg-min-width) {
+                    bottom: 25px;
+                }
             }
         }
         
@@ -106,11 +189,23 @@ body {
             font-family: $open-sans;
             font-weight: normal;
             color: $white;
+            margin-bottom: 5px;
+
+            
+
+            &--edit {
+                border: 1px solid transparent;
+                
+                &--done {
+                text-decoration-line: line-through;
+                }
+            }
 
             &__icon {
                 width: 30px;
                 display: inline-block;
                 text-align: center;
+                cursor: pointer;
 
                 .fas {
                     transform: rotate(-90deg);
@@ -119,6 +214,47 @@ body {
                         transform: rotate(0);
                     }
                 }
+            }
+            
+              
+            .dropdown {
+                position: relative;
+                display: inline-block;
+
+                &__button {
+                    color: white;
+                    padding: 0 16px;
+                    font-size: 24px;
+                    border: none;
+                    cursor: pointer;
+                }
+                &__content {
+                    display: none;
+                    position: absolute;
+                    right: 0;
+                    background-color: #f9f9f9;
+                    min-width: 100px;
+                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                    z-index: 1;
+
+                    & a {
+                        color: black;
+                        padding: 0;
+                        font-size: 18px;
+                        text-decoration: none;
+                        display: block;
+
+                        &:hover {
+                            background-color: #f1f1f1;
+                        }
+                    }
+                }
+                &:hover {
+                    .dropdown__content {
+                        display: block;
+                    }
+                }
+                
             }
         }
 
@@ -132,10 +268,103 @@ body {
             
             p {
                 padding: 10px 15px;
+                border: 1px solid transparent;
             }
         }
     }
     
+}
+
+.login {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: $bg-color;
+
+    button {
+        cursor: pointer;
+        background-color: #565e8e;
+        color: white;
+        outline-style: none;
+        border: none;
+        transition: 0.2s;
+
+        &:hover {
+            color: #303658;
+            background-color: $white;
+        }
+        
+    }
+
+    &__container {
+        border: 2px solid white;
+        margin: 0 auto;
+        border-radius: 5px;
+        box-shadow: #d6d6d6 0px 0px 2px 1px;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        max-width: 335px;
+
+        &__top-buttons {
+            display: flex;
+            max-width: 300px;
+            margin: auto;
+
+            button {
+                width: 40%;
+                margin: 25px 5%;
+                height: 35px;
+                font-size: 20px;
+                &.active {
+                    background-color: #303658;
+                    &:hover {
+                        color: #303658;
+                        background-color: $white;
+                    }
+                }
+            }
+        }
+
+        &__inputs {
+            padding: 0 5%;
+            width: 250px;
+            margin: auto;
+
+            #again {
+                display: none;
+                &.again {
+                    display: block;
+                }
+            }
+
+            label {
+                display: block;
+                font-size: 18px;
+                color: white;
+                margin-top: 15px;
+            }
+            input {
+                height: 25px;
+                font-size: 18px;
+                width: 100%;
+            }
+            #login {
+                display: block;
+                width: 100%;
+                margin: 40px 0;
+                height: 45px;
+                font-size: 22px;
+                background-color: #303658;
+                &:hover {
+                    color: #303658;
+                    background-color: $white;
+                }
+            }
+        }
+    }
 }
 
 

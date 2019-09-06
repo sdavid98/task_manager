@@ -81,7 +81,7 @@ export default class Month {
                 monthLength = 30;
                 break;
             case 1:
-                const year = new Date().getFullYear();
+                const year = new Date();
                 if((year.getFullYear() % 4 == 0) && (year.getFullYear() % 100 != 0)) {
                     monthLength = 29;
                 }

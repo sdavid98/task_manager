@@ -11,7 +11,7 @@ export default function callAjax(inputData, targetUrl, successFunc) {
         processData: false,
         success: function(data) {
             console.log(data);
-            return successFunc(JSON.parse(data));
+            if (data) return successFunc(JSON.parse(data));
         }
         
     });

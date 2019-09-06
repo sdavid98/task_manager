@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <title>Calendar</title>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/x-icon" href="cal-icon.png" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    
+</head>
+<body>
+    <div class="login">
+        <div class="login__container">
+            <div class="login__container__top-buttons">
+                <button id="log" class="active">Login</button>
+                <button id="reg">Register</button>
+            </div>
+            <div class="login__container__inputs">
+                <label for="username">Username</label><input id="username" type="text">
+                <label for="password1">Password</label><input id="password1" type="password">
+                <div id="again">
+                    <label for="password2">Password again</label><input id="password2" type="password">
+                </div>
+                <div id="error"></div>
+                <button id="login">Login</button>
+            </div>
+            
+        </div>
+    </div>
+    <script>
+        let action = 'log';
+        ['log', 'reg'].map(val => document.getElementById(val).addEventListener('click', function() {
+            if (!this.classList.contains('active')) {
+                document.getElementsByClassName('active')[0].classList.remove('active');
+                this.classList.add('active');
+                if (this.id == 'reg') {
+                    document.getElementById('again').classList.add('again');
+                }
+                else {
+                    document.getElementById('again').classList.remove('again');
+                }
+                action = this.id;
+            }
+        }));
+        document.getElementById('login').addEventListener('click', function() {
+            document.getElementById('error').innerHTML = '';
+            if (document.getElementById('username').value != '' && document.getElementById('password1').value != '') {
+                if (action == 'log') {
+                    callAjax({'action': action, 'user': document.getElementById('username').value, 'pw': document.getElementById('password1').value});
+                }
+                else {
+                    if (document.getElementById('password1').value == document.getElementById('password2').value && document.getElementById('password1').value != '') {
+                        callAjax({'action': action, 'user': document.getElementById('username').value, 'pw': document.getElementById('password1').value});
+                    }
+                    else {
+                        document.getElementById('error').innerHTML = "Passwords don't match";
+                    }
+                }
+            }
+        });
+
+        function callAjax(inputData) {
+            const data = new FormData;
+            data.append('sending', JSON.stringify(inputData));
+
+            $.ajax({
+                url: 'php/login.php',
+                method: "POST",
+                data: data,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(data) {
+                    console.log(data);
+                    if (!isNaN(data)) {
+                        document.cookie = `userId=${data}`;
+                        window.open("index.html","_self")
+                    }
+                    else {
+                        document.getElementById('error').innerHTML = data;
+                    }
+                }
+                
+            });
+        }
+    </script>
+</body>
+</html>
