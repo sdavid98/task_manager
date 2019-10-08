@@ -1,7 +1,7 @@
 <?php
 
 
-$user_id = $_COOKIE['userId'];
+$user_id = '7';
 
 function connect($statement, $stmtData, $wantResult) {
     try
@@ -9,7 +9,7 @@ function connect($statement, $stmtData, $wantResult) {
         $dbhost = '127.0.0.1';
         $dbname = 'task_manager';
         $dbuser = 'root';
-        $dbpass = 'taskRoot2019';
+        $dbpass = '';
 
         $a = array();
         $db_conn = new PDO("mysql:dbhost=$dbhost; dbname=$dbname", "$dbuser", "$dbpass");
@@ -60,7 +60,7 @@ function initialCalendar($input) {
             AND user_fk = :user
             ";
 
-    $stmtParams = ['startDay' => $startDay, 'startMonth' => $startMonth, 'endDay' => $endDay, 'endMonth' => $endMonth, 'startYear' => $startYear, 'endYear' => $endYear, 'user' => $_COOKIE['userId']];
+    $stmtParams = ['startDay' => $startDay, 'startMonth' => $startMonth, 'endDay' => $endDay, 'endMonth' => $endMonth, 'startYear' => $startYear, 'endYear' => $endYear, 'user' => '7'];
 
     return connect($stmt, $stmtParams, true);
     //return connect("SELECT task_id, start_month, start_day, length, title, state FROM task WHERE start_month >= :startMonth", ['startMonth'=> $startMonth]);

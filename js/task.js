@@ -25,15 +25,19 @@ export default function fillCalendar(taskData) {
     if (refresh) document.getElementById(currentDay).click();
     refresh = false;
 
-    for (let i = 0; i < currentTasks.length; i++) {
-        document.getElementById(currentTasks[i]).innerHTML += '<span class="line-holder">';
-        /*document.getElementById(currentTasks[i]).addEventListener('click', function() {
-            for (let j = 0; j < currentYears.length; j++) {
-                //console.log(tasks['Y'+currentYears+'-'+currentTasks[i]]); 
-                listOutDay(tasks['Y'+currentYears+'-'+currentTasks[i]], currentTasks[i]);
+    console.log(currentTasks);
+    for (let key in tasks) {
+        if (tasks.hasOwnProperty(key)) {
+            for (let taskName in tasks[key]) {
+                if (tasks[key].hasOwnProperty(taskName)) {
+                    const cell = document.getElementById(key.split('-')[1]+'-'+key.split('-')[2]);
+                    cell.innerHTML += `<div class="task">${tasks[key][taskName]['title']}</div>`;
+                    if (cell.getElementsByTagName('span').length != 2) cell.innerHTML += `<span class="line-holder">`;
+                }
             }
-        });*/
+        }
     }
+    
     for (let i = 0; i < 12; i++) {
         for (let j = 1; j < 32; j++) {
             if (document.getElementById('M'+i+'-D'+j)) {
@@ -48,8 +52,8 @@ export default function fillCalendar(taskData) {
 
     if (firstRequest) {
         let d = new Date();
-        document.getElementById('M'+d.getMonth()+'-D'+(d.getDay()+1)).click();
-        currentDay = 'M'+d.getMonth()+'-D'+(d.getDay()+1);
+        document.getElementById('M'+d.getMonth()+'-D'+d.getDate()).click();
+        currentDay = 'M'+d.getMonth()+'-D'+d.getDate();
         firstRequest = false;
     }
 
