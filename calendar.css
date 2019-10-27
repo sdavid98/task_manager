@@ -9,6 +9,26 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
+#grid {
+  height: 80vh;
+}
+
+.calendar {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: repeat(5, 1fr);
+}
+.calendar.row-6 {
+  grid-template-rows: repeat(6, 1fr);
+}
+.calendar__row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 25px repeat(4, 1fr);
+}
+
 #exit {
   cursor: pointer;
   position: absolute;
@@ -78,75 +98,6 @@ nav h2 a {
 .modal #done a:hover {
   background-color: #ffffff;
   color: #606fee;
-}
-
-.calendar-table {
-  width: 100%;
-  height: 300px;
-  background-color: #303658;
-}
-@media only screen and (min-width: 768px) {
-  .calendar-table {
-    height: 80vh;
-  }
-}
-.calendar-table .calendar-row {
-  width: 100%;
-  display: inline-flex;
-}
-@media only screen and (min-width: 992px) {
-  .calendar-table .calendar-row:nth-child(n+1) {
-    border-left: #b9b9b9 1px solid;
-  }
-  .calendar-table .calendar-row:first-child {
-    border-top: #b9b9b9 1px solid;
-  }
-}
-.calendar-table .calendar-row .today {
-  background-color: #606fee;
-}
-.calendar-table .calendar-row .prev-month, .calendar-table .calendar-row .current-month, .calendar-table .calendar-row .next-month {
-  width: 100%;
-  height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  cursor: pointer;
-}
-@media only screen and (min-width: 768px) {
-  .calendar-table .calendar-row .prev-month, .calendar-table .calendar-row .current-month, .calendar-table .calendar-row .next-month {
-    display: block;
-  }
-  .calendar-table .calendar-row .prev-month .calendar-days, .calendar-table .calendar-row .current-month .calendar-days, .calendar-table .calendar-row .next-month .calendar-days {
-    display: block;
-    text-align: end;
-    padding: 5px 5px 0 0;
-  }
-}
-.calendar-table .calendar-row .prev-month .line-holder, .calendar-table .calendar-row .current-month .line-holder, .calendar-table .calendar-row .next-month .line-holder {
-  position: absolute;
-  height: 7px;
-  width: 7px;
-  border-radius: 50%;
-  bottom: 7px;
-}
-@media only screen and (min-width: 768px) {
-  .calendar-table .calendar-row .prev-month .line-holder, .calendar-table .calendar-row .current-month .line-holder, .calendar-table .calendar-row .next-month .line-holder {
-    display: none;
-  }
-}
-.calendar-table .calendar-row .prev-month .calendar-days, .calendar-table .calendar-row .next-month .calendar-days {
-  color: #a9a9a9;
-}
-.calendar-table .calendar-row .prev-month .line-holder, .calendar-table .calendar-row .next-month .line-holder {
-  background-color: #acb705;
-}
-.calendar-table .calendar-row .current-month .calendar-days {
-  color: #ffffff;
-}
-.calendar-table .calendar-row .current-month .line-holder {
-  background-color: #efff00;
 }
 
 .details {
@@ -501,4 +452,4 @@ nav h2 a {
   }
 }
 
-/*# sourceMappingURL=style.css.map */
+/*# sourceMappingURL=calendar.css.map */

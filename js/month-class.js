@@ -49,20 +49,6 @@ export default class Month {
             calendarEnd.month = this.monthId;
             calendarEnd.day = this.length;
         }
-        /*
-        let startDate;
-        let endDate;
-
-        this.firstDayNum != 1 ? 
-        startDate = `${this.year}-${this.monthId-1}-${this.prevLength - this.firstDay + 2}` 
-        : 
-        startDate = `${this.year}-${this.monthId}-01`;
-
-        this.length + this.firstDay -1 != this.rowNum * 7 ? 
-        endDate = `${this.year}-${this.monthId+1}-${this.rowNum * 7 - this.length - this.firstDay + 1}` 
-        : 
-        endDate = `${this.year}-${this.monthId}-${this.length}`;
-*/
         return {
                 "calendarStart" : calendarStart,
                 "calendarEnd": calendarEnd
