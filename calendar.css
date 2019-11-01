@@ -27,6 +27,20 @@ body {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: 25px repeat(4, 1fr);
+  grid-auto-flow: dense;
+}
+.calendar .task {
+  padding: 2px;
+}
+.calendar .task__inner {
+  background-color: yellowgreen;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding: 0 5px;
+  border-radius: 5px;
+  height: 100%;
+  line-height: 25px;
 }
 
 #exit {
@@ -45,411 +59,74 @@ nav h2 a {
   cursor: pointer;
 }
 
-#create {
-  height: 40px;
-  width: 40px;
-  position: absolute;
-  bottom: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  left: 100%;
-  transform: translateX(-60px);
-  font-size: 60px;
-  border-radius: 50%;
-  background-color: white;
-  color: #606fee;
-  font-weight: bolder;
-  cursor: pointer;
-  transition: 0.2s;
-}
-#create:hover {
-  box-shadow: white 0px 0px 9px 3px;
-}
-
 .modal {
   display: none;
   position: absolute;
-  bottom: 100px;
-  right: 50px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #9fa8f5;
+  background-color: #9fa8f5c2;
 }
-.modal div {
-  margin: 12px 0;
+.modal .task__container {
+  padding: 25px;
+  margin: 25px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #e4e1e1;
+  border-radius: 5px;
 }
-.modal label {
-  color: #ffffff;
+.modal .task__container p {
+  display: inline;
+  margin-right: 10px;
+}
+.modal .task__container #editTaskModal, .modal .task__container #closeTaskModal, .modal .task__container #deleteTask, .modal .task__container #markTaskDone, .modal .task__container #saveTaskChange {
+  cursor: pointer;
+  display: inline;
+}
+.modal .task__container #editTaskModal, .modal .task__container #markTaskDone {
+  margin-right: 15px;
+}
+.modal .task__container #closeTaskModal {
+  float: right;
+}
+.modal .task__interval p {
+  font-size: 20px;
+  color: #3c3b3b;
+}
+.modal .task__title {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid black;
+}
+.modal .task__title p {
+  font-size: 28px;
+}
+.modal .task__display-only {
+  display: block;
+  margin-top: 35px;
+}
+.modal .task__display-only--hidden {
+  display: none;
+}
+.modal .task__edit {
+  display: none;
+}
+.modal .task__edit--visible {
+  display: block;
 }
 .modal label, .modal input, .modal textarea {
   display: block;
   font-size: 18px;
   width: 100%;
 }
-.modal #done {
-  text-align: end;
-  padding-right: 20px;
-  color: #ffffff;
-}
-.modal #done a {
-  padding: 5px;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.modal #done a:hover {
-  background-color: #ffffff;
-  color: #606fee;
-}
-
-.details {
-  background-color: #606fee;
-}
-.details__date {
-  font-family: "Open Sans", sans-serif;
-  text-align: center;
-  padding: 15px 0;
-  text-transform: uppercase;
-  color: #ffffff;
-}
-.details__mini {
-  margin: 15px 0;
-}
-.details__mini__title {
-  font-family: "Open Sans", sans-serif;
-  font-weight: normal;
-  color: #ffffff;
-  margin-bottom: 5px;
-}
-.details__mini__title--edit {
-  border: 1px solid transparent;
-}
-.details__mini__title--edit--done {
-  text-decoration-line: line-through;
-}
-.details__mini__title__icon {
-  width: 30px;
-  display: inline-block;
-  text-align: center;
-  cursor: pointer;
-}
-.details__mini__title__icon .fas {
-  transform: rotate(-90deg);
-  transition: 0.3s;
-}
-.details__mini__title__icon .fas--active {
-  transform: rotate(0);
-}
-.details__mini__title .dropdown {
-  position: relative;
-  display: inline-block;
-}
-.details__mini__title .dropdown__button {
-  color: white;
-  padding: 0 16px;
-  font-size: 24px;
-  border: none;
-  cursor: pointer;
-}
-.details__mini__title .dropdown__content {
-  display: none;
-  position: absolute;
-  right: 0;
-  background-color: #f9f9f9;
-  min-width: 100px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-}
-.details__mini__title .dropdown__content a {
-  color: black;
-  padding: 0;
-  font-size: 18px;
-  text-decoration: none;
-  display: block;
-}
-.details__mini__title .dropdown__content a:hover {
-  background-color: #f1f1f1;
-}
-.details__mini__title .dropdown:hover .dropdown__content {
-  display: block;
-}
-.details__mini__content {
-  height: 0;
-  overflow: hidden;
-  padding: 0 15px;
-  text-align: left;
-  color: #ffffff;
-  font-family: "Open Sans", sans-serif;
-}
-.details__mini__content p {
-  padding: 10px 15px;
-  border: 1px solid transparent;
-}
 
 .task {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-}
-
-.login {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #606fee;
-}
-.login button {
-  cursor: pointer;
-  background-color: #565e8e;
-  color: white;
-  outline-style: none;
-  border: none;
-  transition: 0.2s;
-}
-.login button:hover {
-  color: #303658;
-  background-color: #ffffff;
-}
-.login__container {
-  border: 2px solid white;
-  margin: 0 auto;
-  border-radius: 5px;
-  box-shadow: #d6d6d6 0px 0px 2px 1px;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  max-width: 335px;
-}
-.login__container__top-buttons {
-  display: flex;
-  max-width: 300px;
-  margin: auto;
-}
-.login__container__top-buttons button {
-  width: 40%;
-  margin: 25px 5%;
-  height: 35px;
-  font-size: 20px;
-}
-.login__container__top-buttons button.active {
-  background-color: #303658;
-}
-.login__container__top-buttons button.active:hover {
-  color: #303658;
-  background-color: #ffffff;
-}
-.login__container__inputs {
-  padding: 0 5%;
-  width: 250px;
-  margin: auto;
-}
-.login__container__inputs #again {
-  display: none;
-}
-.login__container__inputs #again.again {
-  display: block;
-}
-.login__container__inputs label {
-  display: block;
-  font-size: 18px;
-  color: white;
-  margin-top: 15px;
-}
-.login__container__inputs input {
-  height: 25px;
-  font-size: 18px;
-  width: 100%;
-}
-.login__container__inputs #login {
-  display: block;
-  width: 100%;
-  margin: 40px 0;
-  height: 45px;
-  font-size: 22px;
-  background-color: #303658;
-}
-.login__container__inputs #login:hover {
-  color: #303658;
-  background-color: #ffffff;
-}
-
-[class*=col-] {
-  float: left;
-  width: 100%;
-}
-
-.row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
-@media only screen and (min-width: 628px) {
-  .col-s-1 {
-    width: 8.33%;
-  }
-
-  .col-s-2 {
-    width: 16.66%;
-  }
-
-  .col-s-3 {
-    width: 25%;
-  }
-
-  .col-s-4 {
-    width: 33.33%;
-  }
-
-  .col-s-5 {
-    width: 41.66%;
-  }
-
-  .col-s-6 {
-    width: 50%;
-  }
-
-  .col-s-7 {
-    width: 58.33%;
-  }
-
-  .col-s-8 {
-    width: 66.66%;
-  }
-
-  .col-s-9 {
-    width: 75%;
-  }
-
-  .col-s-10 {
-    width: 83.33%;
-  }
-
-  .col-s-11 {
-    width: 91.66%;
-  }
-
-  .col-s-12 {
-    width: 100%;
-  }
-
-  .col-s-20 {
-    width: 20%;
-  }
-
-  .col-s-30 {
-    width: 30%;
-  }
-}
-@media only screen and (min-width: 768px) {
-  .col-md-1 {
-    width: 8.33%;
-  }
-
-  .col-md-2 {
-    width: 16.66%;
-  }
-
-  .col-md-3 {
-    width: 25%;
-  }
-
-  .col-md-4 {
-    width: 33.33%;
-  }
-
-  .col-md-5 {
-    width: 41.66%;
-  }
-
-  .col-md-6 {
-    width: 50%;
-  }
-
-  .col-md-7 {
-    width: 58.33%;
-  }
-
-  .col-md-8 {
-    width: 66.66%;
-  }
-
-  .col-md-9 {
-    width: 75%;
-  }
-
-  .col-md-10 {
-    width: 83.33%;
-  }
-
-  .col-md-11 {
-    width: 91.66%;
-  }
-
-  .col-md-12 {
-    width: 100%;
-  }
-
-  .col-md-20 {
-    width: 20%;
-  }
-
-  .col-md-30 {
-    width: 30%;
-  }
-}
-@media only screen and (min-width: 992px) {
-  .col-1 {
-    width: 8.33%;
-  }
-
-  .col-2 {
-    width: 16.66%;
-  }
-
-  .col-3 {
-    width: 25%;
-  }
-
-  .col-4 {
-    width: 33.33%;
-  }
-
-  .col-5 {
-    width: 41.66%;
-  }
-
-  .col-6 {
-    width: 50%;
-  }
-
-  .col-7 {
-    width: 58.33%;
-  }
-
-  .col-8 {
-    width: 66.66%;
-  }
-
-  .col-9 {
-    width: 75%;
-  }
-
-  .col-10 {
-    width: 83.33%;
-  }
-
-  .col-11 {
-    width: 91.66%;
-  }
-
-  .col-12 {
-    width: 100%;
-  }
-
-  .col-11_11 {
-    width: 11.11%;
-  }
 }
 
 /*# sourceMappingURL=calendar.css.map */

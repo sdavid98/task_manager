@@ -10,16 +10,13 @@
         integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
         <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-        <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="calendar.css">
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script type="module" src="main.js"></script>
     
 </head>
 
 <body>
-    <span id="exit" onclick="window.open('login.html','_self')">X</span>
     <header>
         <nav>
             <h2><a id="prev" class="nav-btn"><i class="fas fa-caret-left"></i></a>
@@ -28,23 +25,11 @@
             </h2>
         </nav>
     </header>
-    <div class="row col-12">
-        <section id="cal-body" class="col-md-8 col-s-12"></section>
-        <aside id="taskList" class="col-md-4 col-s-12 details">
-    
-        </aside>
-    </div>
     <div id="grid"></div>
     <div id="create">&#43;</div>
     <div id="modal" class="modal">
-        <div><label for="title">Title</label>
-        <input contenteditable="true" id="title" name="title" type="text"></div>
-        <div><label for="desc">Description</label>
-        <textarea name="desc" id="desc" cols="20" rows="5"></textarea></div>
-        <div id="done"><a>Done</a></div>
-        
     </div>
-    <script type="module" src="main.js"></script>
+
     <script src="script.js"></script>
 </body>
 
