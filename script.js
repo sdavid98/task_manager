@@ -295,12 +295,12 @@ function drawCalendar(_year, _month) {
 
     calBody.innerHTML = cal;
 
-    currentDays = Array.from(document.getElementsByClassName('current-month'));
+    const currentDays = Array.from(document.getElementsByClassName('current-month'));
 
     if (new Date().getMonth() == _month) currentDays[new Date().getDate()-1].classList.add('today');
     
     
-    endPoints = currentMonth.calendarEndPoints;
+    const endPoints = currentMonth.calendarEndPoints;
 
     /*
     AJAX: 
@@ -340,7 +340,7 @@ function moveCalendar(num) {
 
 function fillCalendar(taskData) {
     tasks = {};
-    tasksByDate = {};
+    let tasksByDate = {};
 
     for (let i = 0; i < taskData.length; i++) {
         const taskDate = 'M'+taskData[i].start_month+'-D'+taskData[i].start_day;
@@ -371,9 +371,8 @@ function handleTaskClick() {
 }
 
 function handleTaskModal(id) {
-    const endDate = calculateTaskEndDate(tasks[id]['start_year'], tasks[id]['start_month'], tasks[id]['start_day'], tasks[id]['length']);
     const startMonth = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][tasks[id]['start_month']];
-    const endMonth = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][endDate.endMonth];
+    const endMonth = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][tasks[id]['end_month']];
 
     document.getElementById('modal').innerHTML = 
     `<div class="task__container">
@@ -383,7 +382,7 @@ function handleTaskModal(id) {
         <div id="closeTaskModal">Close</div>
         <div class="task__display-only">
             <div class="task__interval">
-                <p>${startMonth} ${tasks[id]['start_day']} - ${endMonth} ${endDate.endDay}</p>
+                <p>${startMonth} ${tasks[id]['start_day']} - ${endMonth} ${tasks[id]['end_day']}</p>
             </div>
             <div class="task__title">
                 <p>${tasks[id]['title']}</p>
@@ -396,7 +395,7 @@ function handleTaskModal(id) {
         <div class="task__edit">
             <div class="task__interval">
                 <label for="start">Kezdés</label><input id="taskModalStart" name="start" value="${tasks[id]['start_year']}-${tasks[id]['start_month']}-${tasks[id]['start_day']}" type="text" placeholder="YYYY-(M)M-DD">
-                <label for="finish">Befejezés</label><input id="taskModalEnd" name="finish" value="${endDate.endYear}-${endDate.endMonth}-${endDate.endDay}" type="text" placeholder="YYYY-(M)M-DD">
+                <label for="finish">Befejezés</label><input id="taskModalEnd" name="finish" value="${tasks[id]['end_year']}-${tasks[id]['end_month']}-${tasks[id]['end_day']}" type="text" placeholder="YYYY-(M)M-DD">
             </div>
             <div class="task__title">
                 <label for="title">Cím</label>
@@ -423,8 +422,8 @@ function handleTaskModal(id) {
     document.getElementById('deleteTask').addEventListener('click', () => {
         deleteTaskFromCalendar(tasks[id]);
         delete tasks[id];
+        document.getElementById('modal').style.display = 'none';
         //AJAX
-
     })
 
     const editBtn = document.getElementById('editTaskModal');
@@ -450,12 +449,14 @@ function handleTaskModal(id) {
                 tasks[id]['start_year'] = curStart.split('-')[0];
                 tasks[id]['start_month'] = Number(curStart.split('-')[1]);
                 tasks[id]['start_day'] = Number(curStart.split('-')[2]);
+                tasks[id]['length'] = calculateTaskLength(tasks[id]);
                 changes = true;
             }
             if (originEnd != curEnd) {
                 tasks[id]['end_year'] = curEnd.split('-')[0];
                 tasks[id]['end_month'] = curEnd.split('-')[1];
                 tasks[id]['end_day'] = curEnd.split('-')[2];
+                tasks[id]['length'] = calculateTaskLength(tasks[id]);
                 changes = true;
             }
             if (originTitle != curTitle) {
@@ -482,41 +483,12 @@ function handleTaskModal(id) {
     })
 }
 
-function calculateTaskEndDate(year, month, day, len) {
-    const startDate = new Month(year, month);
-    let endYear = year;
-    let endMonth = month;
-    let endDay = day;
-    if (startDate.length - day + 1 < len) {
-        let i = len;
-        while (i > 0) {
-            if (i == len) {
-                endMonth = endMonth == 11 ? 0 : endMonth + 1;
-                endYear = endMonth == 0 ? endYear++ : endYear;
-                i -= (startDate.length - day + 1);
-            }
-            else {
-                const nextMonth = new Month(endYear, endMonth);
-                if (nextMonth.length >= i) {
-                    endDay = i;
-                    i = 0;
-                }
-                else {
-                    endMonth = endMonth == 11 ? 0 : endMonth + 1;
-                    endYear = endMonth == 0 ? endYear++ : endYear;
-                    i -= nextMonth.length;
-                }
-            }
-        }
-    }
-    else {
-        endDay += len - 1;
-    }
-    return {
-        'endYear': endYear,
-        'endMonth': endMonth,
-        'endDay': endDay
-    }
+function calculateTaskLength(task) {
+    const date1 = new Date(task['start_year'], task['start_month'], task['start_day']);
+    const date2 = new Date(task['end_year'], task['end_month'], task['end_day']);
+    const diffTime = Math.abs(date2 - date1) + 1;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    return diffDays;
 }
 
 function deleteTaskFromCalendar(task) {
@@ -527,7 +499,6 @@ function deleteTaskFromCalendar(task) {
 }
 
 function writeOutTasksToMonthCalendar(taskObj) {
-    console.log(taskObj);
     for (let key in taskObj) {
         if (taskObj.hasOwnProperty(key)) {
             const rows = document.getElementsByClassName('calendar__row');
@@ -579,9 +550,9 @@ function writeOutTasksToMonthCalendar(taskObj) {
             else if (taskObj[key]['start_month'] == currentMonthId) {
                 const taskStart = prevCellsNum + taskObj[key]['start_day'];
                 let visibleDaysNum = taskObj[key]['length'] >= rows.length * 7 ? rows.length * 7 - taskStart + 1 : taskObj[key]['length'];
-                const startingRow = (taskStart / 7) == 1 ? 0 : Math.floor(taskStart / 7);
+                const startingRow = taskStart % 7 == 0 ? Math.floor(taskStart / 7) - 1 : Math.floor(taskStart / 7);//  (taskStart / 7) == 1 ? 0 : Math.floor(taskStart / 7);
                 const gridColSpan = 8 - (taskStart % 7 == 0 ? 7 : taskStart % 7);
-                let startOfCol = taskStart < 8 ? 1 : (taskStart % 7 == 0 ? 1 : taskStart % 7);
+                let startOfCol = taskStart < 8 ? 1 : (taskStart % 7 == 0 ? 7 : taskStart % 7);
                 let i = startingRow;
                 do {
                     if (i != startingRow) startOfCol = 1;
