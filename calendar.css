@@ -13,6 +13,11 @@ body {
   height: 80vh;
 }
 
+#create {
+  display: inline;
+  cursor: pointer;
+}
+
 .calendar {
   width: 100%;
   height: 100%;
@@ -41,14 +46,6 @@ body {
   border-radius: 5px;
   height: 100%;
   line-height: 25px;
-}
-
-#exit {
-  cursor: pointer;
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  font-size: 20px;
 }
 
 nav h2 {
@@ -82,7 +79,7 @@ nav h2 a {
   display: inline;
   margin-right: 10px;
 }
-.modal .task__container #editTaskModal, .modal .task__container #closeTaskModal, .modal .task__container #deleteTask, .modal .task__container #markTaskDone, .modal .task__container #saveTaskChange {
+.modal .task__container #editTaskModal, .modal .task__container #closeTaskModal, .modal .task__container #deleteTask, .modal .task__container #markTaskDone, .modal .task__container #saveTaskChange, .modal .task__container #createNewTask {
   cursor: pointer;
   display: inline;
 }

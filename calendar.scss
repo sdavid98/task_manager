@@ -28,7 +28,10 @@ body {
     height: 80vh;
 }
 
-
+#create {
+    display: inline;
+    cursor: pointer;
+}
 
 .calendar {
     width: 100%;
@@ -62,23 +65,6 @@ body {
             line-height: 25px;
         }
     }
-}
-
-
-
-
-
-
-
-
-
-
-#exit {
-    cursor: pointer;
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    font-size: 20px;
 }
 
 nav {
@@ -117,7 +103,7 @@ nav {
                 display: inline;
                 margin-right: 10px;
             }
-            #editTaskModal, #closeTaskModal, #deleteTask, #markTaskDone, #saveTaskChange {
+            #editTaskModal, #closeTaskModal, #deleteTask, #markTaskDone, #saveTaskChange, #createNewTask {
                 cursor: pointer;
                 display: inline;
             }

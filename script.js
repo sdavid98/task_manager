@@ -581,3 +581,51 @@ function writeOutTasksToMonthCalendar(taskObj) {
     }
     handleTaskClick();
 }
+
+document.getElementById('create').addEventListener('click', () => {
+    document.getElementById('modal').innerHTML = 
+    `<div class="task__container">
+        <div id="closeTaskModal">Close</div>
+        <div class="task__create">
+            <div class="task__interval">
+                <label for="start">Kezdés</label><input id="taskModalStart" name="start" type="text" placeholder="YYYY-MM-DD">
+                <label for="finish">Befejezés</label><input id="taskModalEnd" name="finish" type="text" placeholder="YYYY-MM-DD">
+            </div>
+            <div class="task__title">
+                <label for="title">Cím</label>
+                <input id="taskModalTitle" type="text" name="title">
+            </div>
+            <div class="task__description">
+                <label for="descr">Leírás</label>
+                <input id="taskModalDesc" type="text" name="descr">
+            </div>
+            <div id="createNewTask">Save</div>
+        </div>
+    </div>`;
+
+    document.getElementById('modal').style.display = 'block';
+    document.getElementById('closeTaskModal').addEventListener('click', () => document.getElementById('modal').style.display = 'none');
+
+    document.getElementById('createNewTask').addEventListener('click', () => {
+        const newTaskStartInput = document.getElementById('taskModalStart').value;
+        const newTaskEndInput = document.getElementById('taskModalEnd').value;
+        const newTaskTitleInput = document.getElementById('taskModalTitle').value;
+        const newTaskDescInput = document.getElementById('taskModalDesc').value;
+
+        const newTask = {
+            'start_year': newTaskStartInput.split('-')[0],
+            'start_month': Number(newTaskStartInput.split('-')[1]),
+            'start_day': Number(newTaskStartInput.split('-')[2]),
+            'end_year': newTaskEndInput.split('-')[0],
+            'end_month': newTaskEndInput.split('-')[1],
+            'end_day': newTaskEndInput.split('-')[2],
+            'title': newTaskTitleInput,
+            'description': newTaskDescInput
+        }
+
+        newTask['length'] = calculateTaskLength(newTask);
+
+        console.log(newTask);
+        //AJAX: newTask, return newTask és a hozzá tartozó ID, writeOutTasksToMonthCalendar()-ba kerüljön!
+    })
+})
