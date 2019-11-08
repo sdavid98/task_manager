@@ -8,18 +8,15 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css'
         integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
         <script src='https://kit.fontawesome.com/a076d05399.js'></script>
         <link rel="stylesheet" href="calendar.css">
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script type="modul" src="script.js"></script>
+        <link rel="stylesheet" href="weekly_calendar.css">
+    <script type="module" src="weekly_calendar.js"></script>
 </head>
 
 <body>
     <script>
-        localStorage['calendar_type'] ='month';
-        
+        localStorage['calendar_type'] ='week';
     </script>
     <header>
         <nav>
@@ -29,12 +26,12 @@
             </h2><div id="create">ÚJ FELADAT</div>
         </nav>
     </header>
-    <div id="grid"></div>
+    <div id="week_wrapper"></div>
     
     <div id="modal" class="modal">
     </div>
 
-    <script type="module" src="script.js"></script>
+    <script type="module" src="weekly_calendar.js"></script>
 </body>
 
 </html>

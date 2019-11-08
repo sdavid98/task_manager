@@ -1,0 +1,9 @@
+#week {
+    display: grid;
+    grid-template-columns: 50px repeat(7, 1fr);
+    grid-template-rows: repeat(48, 15px);
+
+    .time-interval {
+        grid-column: 1 / 2;
+    }
+}

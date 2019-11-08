@@ -1,0 +1,10 @@
+#week {
+  display: grid;
+  grid-template-columns: 50px repeat(7, 1fr);
+  grid-template-rows: repeat(48, 15px);
+}
+#week .time-interval {
+  grid-column: 1/2;
+}
+
+/*# sourceMappingURL=weekly_calendar.css.map */

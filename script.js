@@ -239,11 +239,15 @@ let prevMonthLength;
 let currentFirstDay;
 let prevCellsNum;
 let nextCellsNum;
-drawCalendar(2019, 10)
+
+if (localStorage['calendar_type'] == 'month') {
+    drawCalendar(2019, 10, 'grid');
+}
 
 
-function drawCalendar(_year, _month) {
-    const calBody = document.getElementById("grid");
+
+function drawCalendar(_year, _month, DOMId) {
+    const calBody = document.getElementById(DOMId);
 
     const currentMonth = new Month(_year, _month);
 
@@ -260,7 +264,8 @@ function drawCalendar(_year, _month) {
     nextCellsNum = 0;
 
     let cal = currentMonth.rowNum == 5 ? `<div class="calendar" id="calendar">` : `<div class="calendar row-6" id="calendar">`;
-    for (let i = 0; i < currentMonth.rowNum; i++) {cal += `<div class="calendar__row">`;
+    for (let i = 0; i < currentMonth.rowNum; i++) {
+        cal += `<div class="calendar__row">`;
         for (let j = 0; j < 7; j++) {
            
         if(cellNum < currentMonth.firstDay) {
@@ -340,17 +345,8 @@ function moveCalendar(num) {
 
 function fillCalendar(taskData) {
     tasks = {};
-    let tasksByDate = {};
 
     for (let i = 0; i < taskData.length; i++) {
-        const taskDate = 'M'+taskData[i].start_month+'-D'+taskData[i].start_day;
-        if (!tasksByDate[taskDate]) {
-            tasksByDate[taskDate] = [];
-            tasksByDate[taskDate].push(taskData[i].task_id);
-        }
-        else {
-            tasksByDate[taskDate].push(taskData[i].task_id);
-        }
         tasks[taskData[i].task_id] = new Task(taskData[i]);
     }
 
@@ -365,14 +361,44 @@ function handleTaskClick() {
     const taskContainers = document.getElementsByClassName('task');
     for (let i = 0; i < taskContainers.length; i++) {
         taskContainers[i].addEventListener('click', function() {
-            handleTaskModal(this.getAttribute('data-task-id'));
+            handleTaskModal(tasks[this.getAttribute('data-task-id')], writeOutTasksToMonthCalendar, tasks);
         })
     }
 }
 
-function handleTaskModal(id) {
-    const startMonth = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][tasks[id]['start_month']];
-    const endMonth = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][tasks[id]['end_month']];
+function modalFormItemsForWeekView(start = '', end = '')  {
+    `<div class="task__duration">
+        <label for="durationStart">Kezdés</label><input id="taskModalDurationStart" value="${start}" name="durationStart" type="text" placeholder="HH-MM">
+        <label for="durationEnd">Befejezés</label><input id="taskModalDurationEnd" value="${end}" name="durationEnd" type="text" placeholder="YYYY-MM-DD">
+    </div>`;
+}
+
+function  getModalDisplayItemForWeekView(start, end) {
+    return `<div class="task__interval">
+                <p>${start} - ${end}</p>
+            </div>`;
+}
+
+function handleTaskModal(task, calendarWriterFunc, taskCollection) {
+    const startMonth = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][task['start_month']];
+    const endMonth = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][task['end_month']];
+
+    let contentDependentOnCalType = '';
+    let inputDependentOnCalType = '';
+
+    if (localStorage['calendar_type'] == 'week') {
+        contentDependentOnCalType = getModalDisplayItemForWeekView();
+        inputDependentOnCalType = modalFormItemsForWeekView();
+    }
+    else {
+        contentDependentOnCalType = `<div class="task__interval">
+                                        <p>${startMonth} ${task['start_day']} - ${endMonth} ${task['end_day']}</p>
+                                    </div>`;
+        inputDependentOnCalType = `<div class="task__interval">
+                                        <label for="start">Kezdés</label><input id="taskModalStart" name="start" value="${task['start_year']}-${task['start_month']}-${task['start_day']}" type="text" placeholder="YYYY-(M)M-DD">
+                                        <label for="finish">Befejezés</label><input id="taskModalEnd" name="finish" value="${task['end_year']}-${task['end_month']}-${task['end_day']}" type="text" placeholder="YYYY-(M)M-DD">
+                                    </div>`;
+    }
 
     document.getElementById('modal').innerHTML = 
     `<div class="task__container">
@@ -381,29 +407,24 @@ function handleTaskModal(id) {
         <div id="deleteTask">Delete</div>
         <div id="closeTaskModal">Close</div>
         <div class="task__display-only">
-            <div class="task__interval">
-                <p>${startMonth} ${tasks[id]['start_day']} - ${endMonth} ${tasks[id]['end_day']}</p>
-            </div>
+            ${contentDependentOnCalType}
             <div class="task__title">
-                <p>${tasks[id]['title']}</p>
+                <p>${task['title']}</p>
             </div>
             <div class="task__description">
-                <p>${tasks[id]['description']}</p>
+                <p>${task['description']}</p>
             </div>
         </div>
 
         <div class="task__edit">
-            <div class="task__interval">
-                <label for="start">Kezdés</label><input id="taskModalStart" name="start" value="${tasks[id]['start_year']}-${tasks[id]['start_month']}-${tasks[id]['start_day']}" type="text" placeholder="YYYY-(M)M-DD">
-                <label for="finish">Befejezés</label><input id="taskModalEnd" name="finish" value="${tasks[id]['end_year']}-${tasks[id]['end_month']}-${tasks[id]['end_day']}" type="text" placeholder="YYYY-(M)M-DD">
-            </div>
+            ${inputDependentOnCalType}
             <div class="task__title">
                 <label for="title">Cím</label>
-                <input id="taskModalTitle" type="text" name="title" value="${tasks[id]['title']}">
+                <input id="taskModalTitle" type="text" name="title" value="${task['title']}">
             </div>
             <div class="task__description">
                 <label for="descr">Leírás</label>
-                <input id="taskModalDesc" type="text" name="descr" value="${tasks[id]['description']}">
+                <input id="taskModalDesc" type="text" name="descr" value="${task['description']}">
             </div>
             <div id="saveTaskChange">Save</div>
         </div>
@@ -414,14 +435,13 @@ function handleTaskModal(id) {
     document.getElementById('closeTaskModal').addEventListener('click', () => document.getElementById('modal').style.display = 'none');
 
     document.getElementById('markTaskDone').addEventListener('click', () => {
-        tasks[id]['state'] = tasks[id]['state'] == 0 ? 1 : 0; 
-        console.log('task ' + tasks[id]['id'] + ' marked as done/undone');}
+        task['state'] = task['state'] == 0 ? 1 : 0; 
         //AJAX UPDATE!
-    );
+    });
 
     document.getElementById('deleteTask').addEventListener('click', () => {
-        deleteTaskFromCalendar(tasks[id]);
-        delete tasks[id];
+        deleteTaskFromCalendar(task);
+        delete taskCollection[task['id']];
         document.getElementById('modal').style.display = 'none';
         //AJAX
     })
@@ -446,25 +466,25 @@ function handleTaskModal(id) {
 
             let changes = false;
             if (originStart != curStart) {
-                tasks[id]['start_year'] = curStart.split('-')[0];
-                tasks[id]['start_month'] = Number(curStart.split('-')[1]);
-                tasks[id]['start_day'] = Number(curStart.split('-')[2]);
-                tasks[id]['length'] = calculateTaskLength(tasks[id]);
+                task['start_year'] = curStart.split('-')[0];
+                task['start_month'] = Number(curStart.split('-')[1]);
+                task['start_day'] = Number(curStart.split('-')[2]);
+                task['length'] = calculateTaskLength(task);
                 changes = true;
             }
             if (originEnd != curEnd) {
-                tasks[id]['end_year'] = curEnd.split('-')[0];
-                tasks[id]['end_month'] = curEnd.split('-')[1];
-                tasks[id]['end_day'] = curEnd.split('-')[2];
-                tasks[id]['length'] = calculateTaskLength(tasks[id]);
+                task['end_year'] = curEnd.split('-')[0];
+                task['end_month'] = curEnd.split('-')[1];
+                task['end_day'] = curEnd.split('-')[2];
+                task['length'] = calculateTaskLength(task);
                 changes = true;
             }
             if (originTitle != curTitle) {
-                tasks[id]['title'] = curTitle;
+                task['title'] = curTitle;
                 changes = true;
             }
             if (originDesc != curDesc) {
-                tasks[id]['description'] = curDesc;
+                task['description'] = curDesc;
                 changes = true;
             }
             if (changes) {
@@ -473,10 +493,10 @@ function handleTaskModal(id) {
                 originEnd = curEnd;
                 originTitle = curTitle;
                 originDesc = curDesc;
-                deleteTaskFromCalendar(tasks[id]);
+                deleteTaskFromCalendar(task);
                 const wrapperObj = {};
-                wrapperObj[tasks[id]['id']] = tasks[id];
-                writeOutTasksToMonthCalendar(wrapperObj);
+                wrapperObj[task['id']] = task;
+                calendarWriterFunc(wrapperObj);
                 //AJAX: 
             }
         })
@@ -582,50 +602,66 @@ function writeOutTasksToMonthCalendar(taskObj) {
     handleTaskClick();
 }
 
-document.getElementById('create').addEventListener('click', () => {
-    document.getElementById('modal').innerHTML = 
-    `<div class="task__container">
-        <div id="closeTaskModal">Close</div>
-        <div class="task__create">
-            <div class="task__interval">
-                <label for="start">Kezdés</label><input id="taskModalStart" name="start" type="text" placeholder="YYYY-MM-DD">
-                <label for="finish">Befejezés</label><input id="taskModalEnd" name="finish" type="text" placeholder="YYYY-MM-DD">
+function createTaskListener() {
+    let inputDependentOnCalType = '';
+
+    if (localStorage['calendar_type'] == 'week') {
+        inputDependentOnCalType = modalFormItemsForWeekView();
+    }
+    else {
+        inputDependentOnCalType = `<div class="task__interval">
+                                        <label for="start">Kezdés</label><input id="taskModalStart" name="start" type="text" placeholder="YYYY-MM-DD">
+                                        <label for="finish">Befejezés</label><input id="taskModalEnd" name="finish" type="text" placeholder="YYYY-MM-DD">
+                                    </div>`;
+    }
+
+    document.getElementById('create').addEventListener('click', () => {
+        document.getElementById('modal').innerHTML = 
+        `<div class="task__container">
+            <div id="closeTaskModal">Close</div>
+            <div class="task__create">
+                ${inputDependentOnCalType}
+                <div class="task__title">
+                    <label for="title">Cím</label>
+                    <input id="taskModalTitle" type="text" name="title">
+                </div>
+                <div class="task__description">
+                    <label for="descr">Leírás</label>
+                    <input id="taskModalDesc" type="text" name="descr">
+                </div>
+                <div id="createNewTask">Save</div>
             </div>
-            <div class="task__title">
-                <label for="title">Cím</label>
-                <input id="taskModalTitle" type="text" name="title">
-            </div>
-            <div class="task__description">
-                <label for="descr">Leírás</label>
-                <input id="taskModalDesc" type="text" name="descr">
-            </div>
-            <div id="createNewTask">Save</div>
-        </div>
-    </div>`;
+        </div>`;
 
-    document.getElementById('modal').style.display = 'block';
-    document.getElementById('closeTaskModal').addEventListener('click', () => document.getElementById('modal').style.display = 'none');
+        document.getElementById('modal').style.display = 'block';
+        document.getElementById('closeTaskModal').addEventListener('click', () => document.getElementById('modal').style.display = 'none');
 
-    document.getElementById('createNewTask').addEventListener('click', () => {
-        const newTaskStartInput = document.getElementById('taskModalStart').value;
-        const newTaskEndInput = document.getElementById('taskModalEnd').value;
-        const newTaskTitleInput = document.getElementById('taskModalTitle').value;
-        const newTaskDescInput = document.getElementById('taskModalDesc').value;
+        document.getElementById('createNewTask').addEventListener('click', () => {
+            const newTaskStartInput = document.getElementById('taskModalStart').value;
+            const newTaskEndInput = document.getElementById('taskModalEnd').value;
+            const newTaskTitleInput = document.getElementById('taskModalTitle').value;
+            const newTaskDescInput = document.getElementById('taskModalDesc').value;
 
-        const newTask = {
-            'start_year': newTaskStartInput.split('-')[0],
-            'start_month': Number(newTaskStartInput.split('-')[1]),
-            'start_day': Number(newTaskStartInput.split('-')[2]),
-            'end_year': newTaskEndInput.split('-')[0],
-            'end_month': newTaskEndInput.split('-')[1],
-            'end_day': newTaskEndInput.split('-')[2],
-            'title': newTaskTitleInput,
-            'description': newTaskDescInput
-        }
+            const newTask = {
+                'start_year': newTaskStartInput.split('-')[0],
+                'start_month': Number(newTaskStartInput.split('-')[1]),
+                'start_day': Number(newTaskStartInput.split('-')[2]),
+                'end_year': newTaskEndInput.split('-')[0],
+                'end_month': newTaskEndInput.split('-')[1],
+                'end_day': newTaskEndInput.split('-')[2],
+                'title': newTaskTitleInput,
+                'description': newTaskDescInput
+            }
 
-        newTask['length'] = calculateTaskLength(newTask);
+            if (localStorage['calendar_type'] == 'week') {
+                newTask['length'] = calculateTaskLength(newTask);
+            }
 
-        console.log(newTask);
-        //AJAX: newTask, return newTask és a hozzá tartozó ID, writeOutTasksToMonthCalendar()-ba kerüljön!
-    })
-})
+            console.log(newTask);
+            //AJAX: newTask, return newTask és a hozzá tartozó ID, writeOutTasksToMonthCalendar()-ba kerüljön!
+        })
+    });
+}
+createTaskListener();
+
+export {Month, Task, handleTaskClick, handleTaskModal, deleteTaskFromCalendar, createTaskListener};
