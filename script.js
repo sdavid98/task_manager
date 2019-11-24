@@ -357,19 +357,19 @@ function createTaskContainer(taskId, colStart, colEnd, title) {
     return `<div class="task" data-task-id="${taskId}" style="grid-column: ${colStart} / ${colEnd}"><div class="task__inner">${title}</div></div>`;
 }
 
-function handleTaskClick() {
+function handleTaskClick(writerFunc, taskObject) {
     const taskContainers = document.getElementsByClassName('task');
     for (let i = 0; i < taskContainers.length; i++) {
         taskContainers[i].addEventListener('click', function() {
-            handleTaskModal(tasks[this.getAttribute('data-task-id')], writeOutTasksToMonthCalendar, tasks);
+            handleTaskModal(taskObject[this.getAttribute('data-task-id')], writerFunc, taskObject);
         })
     }
 }
 
 function modalFormItemsForWeekView(start = '', end = '')  {
-    `<div class="task__duration">
-        <label for="durationStart">Kezdés</label><input id="taskModalDurationStart" value="${start}" name="durationStart" type="text" placeholder="HH-MM">
-        <label for="durationEnd">Befejezés</label><input id="taskModalDurationEnd" value="${end}" name="durationEnd" type="text" placeholder="YYYY-MM-DD">
+    return `<div class="task__duration">
+        <label for="durationStart">Kezdés</label><input id="taskModalDurationStart" value="${start}" name="durationStart" type="text" placeholder="HH:MM">
+        <label for="durationEnd">Befejezés</label><input id="taskModalDurationEnd" value="${end}" name="durationEnd" type="text" placeholder="HH:MM">
     </div>`;
 }
 
@@ -385,10 +385,12 @@ function handleTaskModal(task, calendarWriterFunc, taskCollection) {
 
     let contentDependentOnCalType = '';
     let inputDependentOnCalType = '';
+    let markAsDoneButtonHTML = '<div id="markTaskDone">Task Done</div>';
 
     if (localStorage['calendar_type'] == 'week') {
-        contentDependentOnCalType = getModalDisplayItemForWeekView();
-        inputDependentOnCalType = modalFormItemsForWeekView();
+        contentDependentOnCalType = getModalDisplayItemForWeekView(task['start_time'], task['end_time']);
+        inputDependentOnCalType = modalFormItemsForWeekView(task['start_time'], task['end_time']);
+        markAsDoneButtonHTML = '';
     }
     else {
         contentDependentOnCalType = `<div class="task__interval">
@@ -403,7 +405,7 @@ function handleTaskModal(task, calendarWriterFunc, taskCollection) {
     document.getElementById('modal').innerHTML = 
     `<div class="task__container">
         <div id="editTaskModal">Edit</div>
-        <div id="markTaskDone">Task Done</div>
+        ${markAsDoneButtonHTML}
         <div id="deleteTask">Delete</div>
         <div id="closeTaskModal">Close</div>
         <div class="task__display-only">
@@ -434,10 +436,12 @@ function handleTaskModal(task, calendarWriterFunc, taskCollection) {
     document.getElementById('modal').style.display = 'block';
     document.getElementById('closeTaskModal').addEventListener('click', () => document.getElementById('modal').style.display = 'none');
 
-    document.getElementById('markTaskDone').addEventListener('click', () => {
-        task['state'] = task['state'] == 0 ? 1 : 0; 
-        //AJAX UPDATE!
-    });
+    if (localStorage['calendar_type'] == 'month') {
+        document.getElementById('markTaskDone').addEventListener('click', () => {
+            task['state'] = task['state'] == 0 ? 1 : 0; 
+            //AJAX UPDATE!
+        });
+    }
 
     document.getElementById('deleteTask').addEventListener('click', () => {
         deleteTaskFromCalendar(task);
@@ -453,8 +457,17 @@ function handleTaskModal(task, calendarWriterFunc, taskCollection) {
         document.getElementsByClassName('task__edit')[0].classList.toggle('task__edit--visible');
         document.getElementsByClassName('task__display-only')[0].classList.toggle('task__display-only--hidden');
 
-        let originStart = document.getElementById('taskModalStart').value;
-        let originEnd = document.getElementById('taskModalEnd').value;
+        let originStart = '';
+        let originEnd = '';
+        if (localStorage['calendar_type'] == 'week') {
+            originStart = document.getElementById('taskModalDurationStart').value;
+            originEnd = document.getElementById('taskModalDurationEnd').value;
+        }
+        else {
+            originStart = document.getElementById('taskModalStart').value;
+            originEnd = document.getElementById('taskModalEnd').value;
+        }
+        
         let originTitle = document.getElementById('taskModalTitle').value;
         let originDesc = document.getElementById('taskModalDesc').value;
 
@@ -599,7 +612,7 @@ function writeOutTasksToMonthCalendar(taskObj) {
             }
         }
     }
-    handleTaskClick();
+    handleTaskClick(writeOutTasksToMonthCalendar, tasks);
 }
 
 function createTaskListener() {

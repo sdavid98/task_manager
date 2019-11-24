@@ -1,10 +1,22 @@
 #week {
   display: grid;
   grid-template-columns: 50px repeat(7, 1fr);
-  grid-template-rows: repeat(48, 15px);
 }
-#week .time-interval {
+
+#week_scheduling {
+  display: grid;
+  grid-template-columns: 50px repeat(7, 1fr);
+  grid-template-rows: repeat(50, 15px);
+}
+#week_scheduling .time-interval {
   grid-column: 1/2;
+}
+#week_scheduling .time-interval:not(:last-child) {
+  grid-row: span 4;
+}
+#week_scheduling .schedule-item {
+  background-color: #fff;
+  margin: 0 3px;
 }
 
 /*# sourceMappingURL=weekly_calendar.css.map */
