@@ -55,20 +55,23 @@ class Week extends Month {
     }
 
     weekNum = Math.ceil((super.firstDay + new Date().getDate() - 1) / 7) - 1;
-    weekLength = this.rowNum;
+    weekLength = this.rowNum - 1;
     get firstWeekDay() {
         return this.getFirstWeekDay();
     }
     get prevMonthIsVisible() {
         return this.isPrevMonthVisible();
     }
-    get nextMonthIsVidible() {
+    get nextMonthIsVisible() {
         return this.isNextMonthVisible();
+    }
+    get weekEndPoints() {
+        return this.getWeekEndPoints();
     }
 
     getFirstWeekDay() {
         let num = 0;
-        this.weekNum == 0 ? num = this.prevLength - 7 + this.firstDay - 1 : num = this.weekNum * 7 - 7 + this.firstDay - 1;
+        this.weekNum == 0 ? num = /*this.prevLength - 7 + this.firstDay - 1*/ 1 : num = this.weekNum * 7 - 7 + this.firstDay - 1;
         return num;
     }
     isPrevMonthVisible() {
@@ -76,8 +79,43 @@ class Week extends Month {
         return false;
     }
     isNextMonthVisible() {
-        if (this.weekNum == this.weekLength && (7 - this.firstDay + 1) + (this.weekLength - 1) * 7 % 7 != 0) return true;
+        //if (this.weekNum == this.weekLength && (7 - this.firstDay + 1) + (this.weekLength - 1) * 7 % 7 != 0) return true;
+        if (this.weekNum == this.weekLength && (this.length - this.firstWeekDay) < 7) return true;
         return false;
+    }
+    getWeekEndPoints() {
+        let calendarStart = {};
+        let calendarEnd = {};
+
+        if (this.prevMonthIsVisible) {
+            calendarStart.year = this.monthId == 0 ? this.year - 1 : this.year;
+            calendarStart.month = this.monthId == 0 ? 11 : this.monthId - 1;
+            calendarStart.day = this.prevLength - this.firstDay + 2;
+            calendarEnd.year = this.year;
+            calendarEnd.month = this.monthId;
+            calendarEnd.day = 7 - (this.prevLength - calendarStart.day);
+        }
+        else if (this.nextMonthIsVisible) {
+            calendarStart.year = this.year;
+            calendarStart.month = this.monthId;
+            calendarStart.day = this.firstWeekDay;
+            calendarEnd.year = this.monthId == 11 ? this.year + 1 : this.year;
+            calendarEnd.month = this.monthId == 11 ? 0 : this.monthId + 1;
+            calendarEnd.day = 7 - this.length - this.firstWeekDay;
+        }
+        else {
+            calendarStart.year = this.year;
+            calendarStart.month = this.monthId;
+            calendarStart.day = this.firstWeekDay;
+            calendarEnd.year = this.year;
+            calendarEnd.month = this.monthId;
+            calendarEnd.day = 7 - (this.prevLength - calendarStart.day);
+        }
+
+        return {
+            "calendarStart" : calendarStart,
+            "calendarEnd": calendarEnd
+            }
     }
 }
 
@@ -85,9 +123,44 @@ let tasks = {};
 let weekNums = [];
 const timeInterval = 60;
 
-const week = new Week(2019, 10);
+let week = new Week(2019, 10);
 
 drawWeekView('week_wrapper');
+console.log(week);
+
+const date = new Date();
+let monthPos = date.getMonth();
+let yearPos = date.getFullYear();
+
+document.getElementById('prev').addEventListener('click', moveBack);
+document.getElementById('next').addEventListener('click', moveFwd);
+function moveBack() {
+    moveCalendar(-1);
+}
+
+function moveFwd() {
+    moveCalendar(1);
+}
+
+function moveCalendar(num) {
+    week.weekNum += num;
+    if (week.weekNum < 0) {
+        monthPos--;
+        yearPos = monthPos < 0 ? yearPos-- : yearPos;
+        monthPos = monthPos < 0 ? 11 : monthPos;
+        week = new Week(yearPos, monthPos);
+        week.weekNum = week.rowNum;
+    }
+    else if (week.weekNum > week.rowNum) {
+        monthPos++;
+        yearPos = monthPos > 11 ? yearPos++ : yearPos;
+        monthPos = monthPos > 11 ? 0 : monthPos;
+        week = new Week(yearPos, monthPos);
+        week.weekNum = 0;
+    }
+    console.log(week);
+    drawWeekView('week_wrapper');
+}
 
 function drawWeekView(DOMId) {
     weekNums = [];
@@ -107,7 +180,13 @@ function drawWeekView(DOMId) {
             weekNums.push(newMonthNumbering);
             newMonthNumbering++;
         }
-        else if (!week.prevMonthIsVisible && !week.nextMonthIsVidible && week.firstWeekDay + i <= week.length) {
+        else if (!week.prevMonthIsVisible && !week.nextMonthIsVisible && week.firstWeekDay + i <= week.length) {
+            cal += `<div class="current-month-week">
+            <span class="week-days">${week.firstWeekDay + i}</span></span>
+            </div>`;
+            weekNums.push(week.firstWeekDay + i);
+        }
+        else if (week.nextMonthIsVisible && week.firstWeekDay + i <= week.length) {
             cal += `<div class="current-month-week">
             <span class="week-days">${week.firstWeekDay + i}</span></span>
             </div>`;
@@ -124,6 +203,10 @@ function drawWeekView(DOMId) {
     cal += '</div><div id="week_scheduling"></div></div>';
 
     document.getElementById(DOMId).innerHTML = cal;
+    console.log(week.weekEndPoints);
+    document.getElementById('time').innerHTML = `${week.weekEndPoints.calendarStart.year}.  
+        ${week.weekEndPoints.calendarStart.month + 1}. ${week.weekEndPoints.calendarStart.day}. - ${week.weekEndPoints.calendarEnd.year}.  
+        ${week.weekEndPoints.calendarEnd.month + 1}. ${week.weekEndPoints.calendarEnd.day}`;
 
     writeTimeIntervals();
     fillCalendar(fillData);
@@ -162,53 +245,55 @@ function fillCalendar(taskData) {
 }
 
 function writeOutTasksToWeekCalendar(taskObj) {
-    console.log(taskObj);
     let htmlBody = '';
     for (let key in taskObj) {
         if (taskObj.hasOwnProperty(key)) {
             const current = taskObj[key];
             const columnStart = weekNums.indexOf(current['start_day']) + 2;
-            htmlBody = '';
-            if (current['start_day'] == current['end_day'] && current['start_month'] == current['end_month']) {
-                const rowStart = (Number(current['start_time'].split(':')[0]) - Number(scheduleStartTime.split(':')[0])) * 4 + Math.floor((Number(current['start_time'].split(':')[1]) - Number(scheduleStartTime.split(':')[1])) / 15) + 1;
-                const diff = timeDiff(current['start_time'], current['end_time']);
-                const rowSpan = diff.hours * 4 + Math.floor(diff.minutes / 15);
-                htmlBody += `<div class="schedule-item task" data-task-id="${current['id']}" style="grid-column:${columnStart}; grid-row: ${rowStart} / span ${rowSpan}">
-                    ${current['start_time']} - ${current['end_time']}</div>`;
-            }
-            else {
-                let columnEnd = weekNums.indexOf(current['end_day']) + 2;
-                let hasVisibleEnd = true;
-                if (columnEnd < 2) {
-                    columnEnd = weekNums.length + 2;
-                    hasVisibleEnd = false;
+            if (columnStart >= 2) {
+                htmlBody = '';
+                if (current['start_day'] == current['end_day'] && current['start_month'] == current['end_month']) {
+                    const rowStart = (Number(current['start_time'].split(':')[0]) - Number(scheduleStartTime.split(':')[0])) * 4 + Math.floor((Number(current['start_time'].split(':')[1]) - Number(scheduleStartTime.split(':')[1])) / 15) + 1;
+                    const diff = timeDiff(current['start_time'], current['end_time']);
+                    const rowSpan = diff.hours * 4 + Math.floor(diff.minutes / 15);
+                    htmlBody += `<div class="schedule-item task" data-task-id="${current['id']}" style="grid-column:${columnStart}; grid-row: ${rowStart} / span ${rowSpan}">
+                        ${current['start_time']} - ${current['end_time']}</div>`;
+                }
+                else {
+                    let columnEnd = weekNums.indexOf(current['end_day']) + 2;
+                    let hasVisibleEnd = true;
+                    if (columnEnd < 2) {
+                        columnEnd = weekNums.length + 2;
+                        hasVisibleEnd = false;
+                    }
+
+                    for (let i = columnStart; i <= columnEnd; i++) {
+                        let rowStart = 1;
+                        if (i == columnStart) {
+                            rowStart = (Number(current['start_time'].split(':')[0]) - Number(scheduleStartTime.split(':')[0])) * 4 + Math.floor((Number(current['start_time'].split(':')[1]) - Number(scheduleStartTime.split(':')[1])) / 15) + 1;
+                            const diff = timeDiff(current['start_time'], scheduleEndTime);
+                            const rowSpan = diff.hours * 4 + Math.floor(diff.minutes / 15);
+                            htmlBody += `<div class="schedule-item task" data-task-id="${current['id']}" style="grid-column:${columnStart}; grid-row: ${rowStart} / span ${rowSpan}">
+                                ${current['start_time']} - ${scheduleEndTime}</div>`;
+                        }
+                        else if (i == columnEnd && hasVisibleEnd) {
+                            const diff = timeDiff(scheduleStartTime, current['end_time']);
+                            const rowSpan = diff.hours * 4 + Math.floor(diff.minutes / 15);
+                            htmlBody += `<div class="schedule-item task" data-task-id="${current['id']}" style="grid-column:${columnEnd}; grid-row: ${rowStart} / span ${rowSpan}">
+                                ${scheduleStartTime} - ${current['end_time']}</div>`;
+                        }
+                        else {
+                            const diff = timeDiff(scheduleStartTime, scheduleEndTime);
+                            const rowSpan = diff.hours * 4 + Math.floor(diff.minutes / 15);
+                            htmlBody += `<div class="schedule-item task" data-task-id="${current['id']}" style="grid-column:${columnStart + i}; grid-row: ${rowStart} / span ${rowSpan}">
+                                ${scheduleStartTime} - ${scheduleEndTime}</div>`;
+                        }
+                    }
                 }
 
-                for (let i = columnStart; i <= columnEnd; i++) {
-                    let rowStart = 1;
-                    if (i == columnStart) {
-                        rowStart = (Number(current['start_time'].split(':')[0]) - Number(scheduleStartTime.split(':')[0])) * 4 + Math.floor((Number(current['start_time'].split(':')[1]) - Number(scheduleStartTime.split(':')[1])) / 15) + 1;
-                        const diff = timeDiff(current['start_time'], scheduleEndTime);
-                        const rowSpan = diff.hours * 4 + Math.floor(diff.minutes / 15);
-                        htmlBody += `<div class="schedule-item task" data-task-id="${current['id']}" style="grid-column:${columnStart}; grid-row: ${rowStart} / span ${rowSpan}">
-                            ${current['start_time']} - ${scheduleEndTime}</div>`;
-                    }
-                    else if (i == columnEnd && hasVisibleEnd) {
-                        const diff = timeDiff(scheduleStartTime, current['end_time']);
-                        const rowSpan = diff.hours * 4 + Math.floor(diff.minutes / 15);
-                        htmlBody += `<div class="schedule-item task" data-task-id="${current['id']}" style="grid-column:${columnEnd}; grid-row: ${rowStart} / span ${rowSpan}">
-                            ${scheduleStartTime} - ${current['end_time']}</div>`;
-                    }
-                    else {
-                        const diff = timeDiff(scheduleStartTime, scheduleEndTime);
-                        const rowSpan = diff.hours * 4 + Math.floor(diff.minutes / 15);
-                        htmlBody += `<div class="schedule-item task" data-task-id="${current['id']}" style="grid-column:${columnStart + i}; grid-row: ${rowStart} / span ${rowSpan}">
-                            ${scheduleStartTime} - ${scheduleEndTime}</div>`;
-                    }
-                }
+                document.getElementById('week_scheduling').innerHTML += htmlBody;
             }
-
-            document.getElementById('week_scheduling').innerHTML += htmlBody;
+            
         }
     }
     handleTaskClick(writeOutTasksToWeekCalendar, tasks);
