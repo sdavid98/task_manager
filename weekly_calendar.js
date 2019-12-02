@@ -54,8 +54,8 @@ class Week extends Month {
         super(year, month);
     }
 
-    weekNum = Math.ceil((super.firstDay + new Date().getDate() - 1) / 7) - 1;
-    weekLength = this.rowNum - 1;
+    weekNum = Math.ceil((super.firstDay + new Date().getDate() - 1) / 7);
+    weekLength = this.rowNum;
     get firstWeekDay() {
         return this.getFirstWeekDay();
     }
@@ -71,11 +71,11 @@ class Week extends Month {
 
     getFirstWeekDay() {
         let num = 0;
-        this.weekNum == 0 ? num = /*this.prevLength - 7 + this.firstDay - 1*/ 1 : num = this.weekNum * 7 - 7 + this.firstDay - 1;
+        this.weekNum == 1 ? num = this.prevLength - this.firstDay + 2 : num = (this.weekNum - 2) * 7 + 7 - this.firstDay + 2;
         return num;
     }
     isPrevMonthVisible() {
-        if (this.weekNum == 0 && this.firstDay != 1) return true;
+        if (this.weekNum == 1 && this.firstDay != 1) return true;
         return false;
     }
     isNextMonthVisible() {
@@ -93,7 +93,7 @@ class Week extends Month {
             calendarStart.day = this.prevLength - this.firstDay + 2;
             calendarEnd.year = this.year;
             calendarEnd.month = this.monthId;
-            calendarEnd.day = 7 - (this.prevLength - calendarStart.day);
+            calendarEnd.day = 7 - (this.prevLength - calendarStart.day) - 1;
         }
         else if (this.nextMonthIsVisible) {
             calendarStart.year = this.year;
@@ -101,7 +101,7 @@ class Week extends Month {
             calendarStart.day = this.firstWeekDay;
             calendarEnd.year = this.monthId == 11 ? this.year + 1 : this.year;
             calendarEnd.month = this.monthId == 11 ? 0 : this.monthId + 1;
-            calendarEnd.day = 7 - this.length - this.firstWeekDay;
+            calendarEnd.day = 7 - (this.length - this.firstWeekDay) - 1;
         }
         else {
             calendarStart.year = this.year;
@@ -109,7 +109,7 @@ class Week extends Month {
             calendarStart.day = this.firstWeekDay;
             calendarEnd.year = this.year;
             calendarEnd.month = this.monthId;
-            calendarEnd.day = 7 - (this.prevLength - calendarStart.day);
+            calendarEnd.day = this.firstWeekDay + 6;
         }
 
         return {
@@ -123,7 +123,7 @@ let tasks = {};
 let weekNums = [];
 const timeInterval = 60;
 
-let week = new Week(2019, 10);
+let week = new Week(2019, 11);
 
 drawWeekView('week_wrapper');
 console.log(week);
@@ -135,30 +135,40 @@ let yearPos = date.getFullYear();
 document.getElementById('prev').addEventListener('click', moveBack);
 document.getElementById('next').addEventListener('click', moveFwd);
 function moveBack() {
-    moveCalendar(-1);
+    if (week.weekNum == 1) {
+        if (monthPos == 0) {
+            monthPos = 11;
+            yearPos--;
+        }
+        else {
+            monthPos--;
+        }
+        week = new Week(yearPos, monthPos);
+        week.weekNum = week.weekLength - 1;
+    }
+    else {
+        week.weekNum--;
+    }
+    console.log(week);
+    drawWeekView('week_wrapper');
 }
 
 function moveFwd() {
-    moveCalendar(1);
-}
-
-function moveCalendar(num) {
-    week.weekNum += num;
-    if (week.weekNum < 0) {
-        monthPos--;
-        yearPos = monthPos < 0 ? yearPos-- : yearPos;
-        monthPos = monthPos < 0 ? 11 : monthPos;
+    if (week.weekNum == week.weekLength && week.nextMonthIsVisible) {
+        if (monthPos == 11) {
+            monthPos = 0;
+            yearPos++;
+        }
+        else {
+            monthPos++;
+        }
+        console.log(monthPos, yearPos);
         week = new Week(yearPos, monthPos);
-        week.weekNum = week.rowNum;
+        week.weekNum = 2;
     }
-    else if (week.weekNum > week.rowNum) {
-        monthPos++;
-        yearPos = monthPos > 11 ? yearPos++ : yearPos;
-        monthPos = monthPos > 11 ? 0 : monthPos;
-        week = new Week(yearPos, monthPos);
-        week.weekNum = 0;
+    else {
+        week.weekNum++;
     }
-    console.log(week);
     drawWeekView('week_wrapper');
 }
 
@@ -173,13 +183,13 @@ function drawWeekView(DOMId) {
             </div>`;
             weekNums.push(week.firstWeekDay + i);
         }
-        else if (week.prevMonthIsVisible) {
+        /*else if (week.prevMonthIsVisible) {
             cal += `<div class="current-month-week">
             <span class="week-days">${newMonthNumbering}</span></span>
             </div>`;
             weekNums.push(newMonthNumbering);
             newMonthNumbering++;
-        }
+        }*/
         else if (!week.prevMonthIsVisible && !week.nextMonthIsVisible && week.firstWeekDay + i <= week.length) {
             cal += `<div class="current-month-week">
             <span class="week-days">${week.firstWeekDay + i}</span></span>
