@@ -126,7 +126,6 @@ const timeInterval = 60;
 let week = new Week(2019, 11);
 
 drawWeekView('week_wrapper');
-console.log(week);
 
 const date = new Date();
 let monthPos = date.getMonth();
@@ -149,7 +148,6 @@ function moveBack() {
     else {
         week.weekNum--;
     }
-    console.log(week);
     drawWeekView('week_wrapper');
 }
 
@@ -162,7 +160,6 @@ function moveFwd() {
         else {
             monthPos++;
         }
-        console.log(monthPos, yearPos);
         week = new Week(yearPos, monthPos);
         week.weekNum = 2;
     }
@@ -183,13 +180,6 @@ function drawWeekView(DOMId) {
             </div>`;
             weekNums.push(week.firstWeekDay + i);
         }
-        /*else if (week.prevMonthIsVisible) {
-            cal += `<div class="current-month-week">
-            <span class="week-days">${newMonthNumbering}</span></span>
-            </div>`;
-            weekNums.push(newMonthNumbering);
-            newMonthNumbering++;
-        }*/
         else if (!week.prevMonthIsVisible && !week.nextMonthIsVisible && week.firstWeekDay + i <= week.length) {
             cal += `<div class="current-month-week">
             <span class="week-days">${week.firstWeekDay + i}</span></span>
@@ -213,7 +203,6 @@ function drawWeekView(DOMId) {
     cal += '</div><div id="week_scheduling"></div></div>';
 
     document.getElementById(DOMId).innerHTML = cal;
-    console.log(week.weekEndPoints);
     document.getElementById('time').innerHTML = `${week.weekEndPoints.calendarStart.year}.  
         ${week.weekEndPoints.calendarStart.month + 1}. ${week.weekEndPoints.calendarStart.day}. - ${week.weekEndPoints.calendarEnd.year}.  
         ${week.weekEndPoints.calendarEnd.month + 1}. ${week.weekEndPoints.calendarEnd.day}`;
@@ -255,6 +244,7 @@ function fillCalendar(taskData) {
 }
 
 function writeOutTasksToWeekCalendar(taskObj) {
+    console.log(taskObj);
     let htmlBody = '';
     for (let key in taskObj) {
         if (taskObj.hasOwnProperty(key)) {
@@ -295,7 +285,7 @@ function writeOutTasksToWeekCalendar(taskObj) {
                         else {
                             const diff = timeDiff(scheduleStartTime, scheduleEndTime);
                             const rowSpan = diff.hours * 4 + Math.floor(diff.minutes / 15);
-                            htmlBody += `<div class="schedule-item task" data-task-id="${current['id']}" style="grid-column:${columnStart + i}; grid-row: ${rowStart} / span ${rowSpan}">
+                            htmlBody += `<div class="schedule-item task" data-task-id="${current['id']}" style="grid-column:${i}; grid-row: ${rowStart} / span ${rowSpan}">
                                 ${scheduleStartTime} - ${scheduleEndTime}</div>`;
                         }
                     }
